@@ -7,10 +7,6 @@ final class AuctionsService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'placeBids' => ['method' => 'POST', 'path' => '/v1/customers/{customerId}/aftermarket/listings/bids'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ZPMLabs\GoDaddy\Tests;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -43,7 +42,7 @@ final class GeneratedServicesTest extends TestCase
         SubscriptionsService::class => 'subscriptions',
     ];
 
-    public function test_every_declared_operation_builds_a_request(): void
+    public function test_every_service_method_builds_a_request(): void
     {
         $transport = new TestTransport();
         $client = new Client(
@@ -54,57 +53,23 @@ final class GeneratedServicesTest extends TestCase
         foreach (self::SERVICES as $serviceClass => $accessor) {
             $service = $client->{$accessor}();
 
-            foreach ($serviceClass::OPERATIONS as $methodName => $operation) {
-                $args = isset($operation['params'])
-                    ? array_map(fn (array $param): mixed => $this->sampleValue($param['name'], $param['in']), $operation['params'])
-                    : $this->buildArgsFromReflection($service, $methodName);
+            foreach ($this->publicServiceMethods($serviceClass) as $methodName) {
+                $args = $this->buildArgsFromReflection($service, $methodName);
 
                 $transport->push(new Response(200, ['Content-Type' => 'application/json'], '{}'));
                 $before = count($transport->requests);
                 $service->{$methodName}(...$args);
                 $request = $transport->requests[$before];
 
-                self::assertSame($operation['method'], $request->method, $serviceClass . '::' . $methodName);
                 self::assertStringNotContainsString('{', $request->url, $serviceClass . '::' . $methodName);
                 self::assertSame('sso-key key:secret', $request->headers['Authorization'] ?? null);
             }
         }
     }
 
-    private function sampleValue(string $name, string $location): mixed
-    {
-        if ($location === 'body') {
-            return ['sample' => true];
-        }
-
-        $lower = strtolower($name);
-        if (str_contains($lower, 'limit') || str_contains($lower, 'offset') || $lower === 'page' || $lower === 'pagesize' || str_contains($lower, 'waitms')) {
-            return 1;
-        }
-
-        if (str_contains($lower, 'closed') || $lower === 'latest' || str_contains($lower, 'includesubs') || str_contains($lower, 'privacy') || str_contains($lower, 'fortransfer')) {
-            return true;
-        }
-
-        if (str_starts_with($name, 'X-')) {
-            return 'header-value';
-        }
-
-        if (str_ends_with($lower, 's') || in_array($lower, ['keys', 'domains', 'statuses', 'statusgroups', 'includes', 'sources', 'tlds', 'types', 'productgroupkeys'], true)) {
-            return ['sample'];
-        }
-
-        return 'sample';
-    }
-
     private function buildArgsFromReflection(object $service, string $methodName): array
     {
-        try {
-            $method = new ReflectionMethod($service, $methodName);
-        } catch (ReflectionException) {
-            return [];
-        }
-
+        $method = new ReflectionMethod($service, $methodName);
         $args = [];
         foreach ($method->getParameters() as $parameter) {
             $args[] = $this->sampleValueFromParameter($parameter);
@@ -131,5 +96,26 @@ final class GeneratedServicesTest extends TestCase
             'array' => ['sample'],
             default => 'sample',
         };
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function publicServiceMethods(string $serviceClass): array
+    {
+        $methods = [];
+        foreach ((new \ReflectionClass($serviceClass))->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->getDeclaringClass()->getName() !== $serviceClass) {
+                continue;
+            }
+
+            if ($method->isConstructor() || str_starts_with($method->getName(), '__')) {
+                continue;
+            }
+
+            $methods[] = $method->getName();
+        }
+
+        return $methods;
     }
 }

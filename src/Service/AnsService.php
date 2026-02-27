@@ -7,21 +7,6 @@ final class AnsService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'searchANSName' => ['method' => 'GET', 'path' => '/v1/agents'],
-        'registerAgent' => ['method' => 'POST', 'path' => '/v1/agents/register'],
-        'resolveANSName' => ['method' => 'POST', 'path' => '/v1/agents/resolution'],
-        'getAgent' => ['method' => 'GET', 'path' => '/v1/agents/{agentId}'],
-        'validateRegistration' => ['method' => 'POST', 'path' => '/v1/agents/{agentId}/verify-acme'],
-        'verifyDnsRecords' => ['method' => 'POST', 'path' => '/v1/agents/{agentId}/verify-dns'],
-        'getAgentIdentityCertificateByAgentId' => ['method' => 'GET', 'path' => '/v1/agents/{agentId}/certificates/identity'],
-        'submitAgentIdentityCsrByAgentId' => ['method' => 'POST', 'path' => '/v1/agents/{agentId}/certificates/identity'],
-        'getAgentServerCertificateByAgentId' => ['method' => 'GET', 'path' => '/v1/agents/{agentId}/certificates/server'],
-        'submitAgentServerCsrByAgentId' => ['method' => 'POST', 'path' => '/v1/agents/{agentId}/certificates/server'],
-        'getAgentCsrStatusByAgentId' => ['method' => 'GET', 'path' => '/v1/agents/{agentId}/csrs/{csrId}/status'],
-        'getAgentEvents' => ['method' => 'GET', 'path' => '/v1/agents/events'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

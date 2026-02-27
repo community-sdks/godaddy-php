@@ -7,15 +7,6 @@ final class AbuseService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'getTickets' => ['method' => 'GET', 'path' => '/v1/abuse/tickets'],
-        'createTicket' => ['method' => 'POST', 'path' => '/v1/abuse/tickets'],
-        'getTicketInfo' => ['method' => 'GET', 'path' => '/v1/abuse/tickets/{ticketId}'],
-        'getTicketsV2' => ['method' => 'GET', 'path' => '/v2/abuse/tickets'],
-        'createTicketV2' => ['method' => 'POST', 'path' => '/v2/abuse/tickets'],
-        'getTicketInfoV2' => ['method' => 'GET', 'path' => '/v2/abuse/tickets/{ticketId}'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

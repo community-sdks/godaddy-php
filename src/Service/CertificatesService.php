@@ -3,43 +3,152 @@ declare(strict_types=1);
 
 namespace ZPMLabs\GoDaddy\Service;
 
-final class CertificatesService extends DynamicOperationService
+final class CertificatesService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
-
-    public const OPERATIONS = [
-        'certificate_create' => ['method' => 'POST', 'path' => '/v1/certificates', 'params' => [['name' => 'X-Market-Id', 'in' => 'header', 'required' => false], ['name' => 'certificateCreate', 'in' => 'body', 'required' => true]]],
-        'certificate_validate' => ['method' => 'POST', 'path' => '/v1/certificates/validate', 'params' => [['name' => 'X-Market-Id', 'in' => 'header', 'required' => false], ['name' => 'certificateCreate', 'in' => 'body', 'required' => true]]],
-        'certificate_get' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_action_retrieve' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}/actions', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_resend_email' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/email/{emailId}/resend', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'emailId', 'in' => 'path', 'required' => true]]],
-        'certificate_alternate_email_address' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/email/resend/{emailAddress}', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'emailAddress', 'in' => 'path', 'required' => true]]],
-        'certificate_resend_email_address' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/email/{emailId}/resend/{emailAddress}', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'emailId', 'in' => 'path', 'required' => true], ['name' => 'emailAddress', 'in' => 'path', 'required' => true]]],
-        'certificate_email_history' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}/email/history', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_callback_delete' => ['method' => 'DELETE', 'path' => '/v1/certificates/{certificateId}/callback', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_callback_get' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}/callback', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_callback_replace' => ['method' => 'PUT', 'path' => '/v1/certificates/{certificateId}/callback', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'callbackUrl', 'in' => 'query', 'required' => true]]],
-        'certificate_cancel' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/cancel', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_download' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}/download', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_reissue' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/reissue', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'reissueCreate', 'in' => 'body', 'required' => true]]],
-        'certificate_renew' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/renew', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'renewCreate', 'in' => 'body', 'required' => true]]],
-        'certificate_revoke' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/revoke', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'certificateRevoke', 'in' => 'body', 'required' => true]]],
-        'certificate_siteseal_get' => ['method' => 'GET', 'path' => '/v1/certificates/{certificateId}/siteSeal', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'theme', 'in' => 'query', 'required' => false], ['name' => 'locale', 'in' => 'query', 'required' => false]]],
-        'certificate_verifydomaincontrol' => ['method' => 'POST', 'path' => '/v1/certificates/{certificateId}/verifyDomainControl', 'params' => [['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'certificate_get_entitlement' => ['method' => 'GET', 'path' => '/v2/certificates', 'params' => [['name' => 'entitlementId', 'in' => 'query', 'required' => true], ['name' => 'latest', 'in' => 'query', 'required' => false]]],
-        'certificate_create_v2' => ['method' => 'POST', 'path' => '/v2/certificates', 'params' => [['name' => 'X-Market-Id', 'in' => 'header', 'required' => false], ['name' => 'subscriptionCertificateCreate', 'in' => 'body', 'required' => true]]],
-        'certificate_download_entitlement' => ['method' => 'GET', 'path' => '/v2/certificates/download', 'params' => [['name' => 'entitlementId', 'in' => 'query', 'required' => true]]],
-        'getCustomerCertificatesByCustomerId' => ['method' => 'GET', 'path' => '/v2/customers/{customerId}/certificates', 'params' => [['name' => 'customerId', 'in' => 'path', 'required' => true], ['name' => 'offset', 'in' => 'query', 'required' => false], ['name' => 'limit', 'in' => 'query', 'required' => false]]],
-        'getCertificateDetailByCertIdentifier' => ['method' => 'GET', 'path' => '/v2/customers/{customerId}/certificates/{certificateId}', 'params' => [['name' => 'customerId', 'in' => 'path', 'required' => true], ['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'getDomainInformationByCertificateId' => ['method' => 'GET', 'path' => '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications', 'params' => [['name' => 'customerId', 'in' => 'path', 'required' => true], ['name' => 'certificateId', 'in' => 'path', 'required' => true]]],
-        'getDomainDetailsByDomain' => ['method' => 'GET', 'path' => '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications/{domain}', 'params' => [['name' => 'customerId', 'in' => 'path', 'required' => true], ['name' => 'certificateId', 'in' => 'path', 'required' => true], ['name' => 'domain', 'in' => 'path', 'required' => true]]],
-        'getAcmeExternalAccountBinding' => ['method' => 'GET', 'path' => '/v2/customers/{customerId}/certificates/acme/externalAccountBinding', 'params' => [['name' => 'customerId', 'in' => 'path', 'required' => true]]],
-        'retrieveSslByDomainReseller' => ['method' => 'GET', 'path' => '/v2/certificates/subscriptions/search', 'params' => [['name' => 'pageSize', 'in' => 'query', 'required' => false], ['name' => 'page', 'in' => 'query', 'required' => false], ['name' => 'domain', 'in' => 'query', 'required' => false], ['name' => 'status', 'in' => 'query', 'required' => false], ['name' => 'type', 'in' => 'query', 'required' => false], ['name' => 'validation', 'in' => 'query', 'required' => false]]],
-        'retrieveSslByDomainSubscriptionReseller' => ['method' => 'GET', 'path' => '/v2/certificates/subscription/{guid}', 'params' => [['name' => 'guid', 'in' => 'path', 'required' => true], ['name' => 'pageSize', 'in' => 'query', 'required' => false], ['name' => 'page', 'in' => 'query', 'required' => false], ['name' => 'domain', 'in' => 'query', 'required' => false], ['name' => 'status', 'in' => 'query', 'required' => false], ['name' => 'type', 'in' => 'query', 'required' => false], ['name' => 'validation', 'in' => 'query', 'required' => false]]],
-    ];
 
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);
+    }
+
+    public function certificate_create(array $certificateCreate, ?string $xMarketId = null): mixed
+    {
+        return $this->call('POST', '/v1/certificates', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
+    }
+
+    public function certificate_validate(array $certificateCreate, ?string $xMarketId = null): mixed
+    {
+        return $this->call('POST', '/v1/certificates/validate', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
+    }
+
+    public function certificate_get(string $certificateId): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_action_retrieve(string $certificateId): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}/actions', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_resend_email(string $certificateId, string $emailId): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend', pathParams: compact('certificateId', 'emailId'));
+    }
+
+    public function certificate_alternate_email_address(string $certificateId, string $emailAddress): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/email/resend/{emailAddress}', pathParams: compact('certificateId', 'emailAddress'));
+    }
+
+    public function certificate_resend_email_address(string $certificateId, string $emailId, string $emailAddress): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend/{emailAddress}', pathParams: compact('certificateId', 'emailId', 'emailAddress'));
+    }
+
+    public function certificate_email_history(string $certificateId): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}/email/history', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_callback_delete(string $certificateId): mixed
+    {
+        return $this->call('DELETE', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_callback_get(string $certificateId): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_callback_replace(string $certificateId, string $callbackUrl): mixed
+    {
+        return $this->call('PUT', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'), queryParams: compact('callbackUrl'));
+    }
+
+    public function certificate_cancel(string $certificateId): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/cancel', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_download(string $certificateId): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}/download', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_reissue(string $certificateId, array $reissueCreate): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/reissue', pathParams: compact('certificateId'), body: $reissueCreate);
+    }
+
+    public function certificate_renew(string $certificateId, array $renewCreate): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/renew', pathParams: compact('certificateId'), body: $renewCreate);
+    }
+
+    public function certificate_revoke(string $certificateId, array $certificateRevoke): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/revoke', pathParams: compact('certificateId'), body: $certificateRevoke);
+    }
+
+    public function certificate_siteseal_get(string $certificateId, mixed $theme = null, mixed $locale = null): mixed
+    {
+        return $this->call('GET', '/v1/certificates/{certificateId}/siteSeal', pathParams: compact('certificateId'), queryParams: compact('theme', 'locale'));
+    }
+
+    public function certificate_verifydomaincontrol(string $certificateId): mixed
+    {
+        return $this->call('POST', '/v1/certificates/{certificateId}/verifyDomainControl', pathParams: compact('certificateId'));
+    }
+
+    public function certificate_get_entitlement(string $entitlementId, ?bool $latest = null): mixed
+    {
+        return $this->call('GET', '/v2/certificates', queryParams: compact('entitlementId', 'latest'));
+    }
+
+    public function certificate_create_v2(array $subscriptionCertificateCreate, ?string $xMarketId = null): mixed
+    {
+        return $this->call('POST', '/v2/certificates', headers: ['X-Market-Id' => $xMarketId], body: $subscriptionCertificateCreate);
+    }
+
+    public function certificate_download_entitlement(string $entitlementId): mixed
+    {
+        return $this->call('GET', '/v2/certificates/download', queryParams: compact('entitlementId'));
+    }
+
+    public function getCustomerCertificatesByCustomerId(string $customerId, ?int $offset = null, ?int $limit = null): mixed
+    {
+        return $this->call('GET', '/v2/customers/{customerId}/certificates', pathParams: compact('customerId'), queryParams: compact('offset', 'limit'));
+    }
+
+    public function getCertificateDetailByCertIdentifier(string $customerId, string $certificateId): mixed
+    {
+        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}', pathParams: compact('customerId', 'certificateId'));
+    }
+
+    public function getDomainInformationByCertificateId(string $customerId, string $certificateId): mixed
+    {
+        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications', pathParams: compact('customerId', 'certificateId'));
+    }
+
+    public function getDomainDetailsByDomain(string $customerId, string $certificateId, string $domain): mixed
+    {
+        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications/{domain}', pathParams: compact('customerId', 'certificateId', 'domain'));
+    }
+
+    public function getAcmeExternalAccountBinding(string $customerId): mixed
+    {
+        return $this->call('GET', '/v2/customers/{customerId}/certificates/acme/externalAccountBinding', pathParams: compact('customerId'));
+    }
+
+    public function retrieveSslByDomainReseller(?int $pageSize = null, ?int $page = null, ?string $domain = null, ?string $status = null, ?string $type = null, ?string $validation = null): mixed
+    {
+        return $this->call('GET', '/v2/certificates/subscriptions/search', queryParams: compact('pageSize', 'page', 'domain', 'status', 'type', 'validation'));
+    }
+
+    public function retrieveSslByDomainSubscriptionReseller(string $guid, ?int $pageSize = null, ?int $page = null, ?string $domain = null, ?string $status = null, ?string $type = null, ?string $validation = null): mixed
+    {
+        return $this->call('GET', '/v2/certificates/subscription/{guid}', pathParams: compact('guid'), queryParams: compact('pageSize', 'page', 'domain', 'status', 'type', 'validation'));
     }
 }

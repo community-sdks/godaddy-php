@@ -7,12 +7,6 @@ final class AftermarketService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'getListings' => ['method' => 'GET', 'path' => '/v1/customers/{customerId}/auctions/listings'],
-        'deleteListings' => ['method' => 'DELETE', 'path' => '/v1/aftermarket/listings'],
-        'addExpiryListings' => ['method' => 'POST', 'path' => '/v1/aftermarket/listings/expiry'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

@@ -7,15 +7,6 @@ final class ShoppersService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'createSubaccount' => ['method' => 'POST', 'path' => '/v1/shoppers/subaccount'],
-        'get' => ['method' => 'GET', 'path' => '/v1/shoppers/{shopperId}'],
-        'update' => ['method' => 'POST', 'path' => '/v1/shoppers/{shopperId}'],
-        'delete' => ['method' => 'DELETE', 'path' => '/v1/shoppers/{shopperId}'],
-        'getStatus' => ['method' => 'GET', 'path' => '/v1/shoppers/{shopperId}/status'],
-        'changePassword' => ['method' => 'PUT', 'path' => '/v1/shoppers/{shopperId}/factors/password'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

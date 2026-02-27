@@ -7,11 +7,6 @@ final class CountriesService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'getCountries' => ['method' => 'GET', 'path' => '/v1/countries'],
-        'getCountry' => ['method' => 'GET', 'path' => '/v1/countries/{countryKey}'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

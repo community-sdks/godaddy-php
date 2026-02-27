@@ -7,11 +7,6 @@ final class ParkingService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'getMetrics' => ['method' => 'GET', 'path' => '/v1/customers/{customerId}/parking/metrics'],
-        'getMetricsByDomain' => ['method' => 'GET', 'path' => '/v1/customers/{customerId}/parking/metricsByDomain'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

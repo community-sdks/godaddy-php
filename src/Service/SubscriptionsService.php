@@ -7,14 +7,6 @@ final class SubscriptionsService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'list' => ['method' => 'GET', 'path' => '/v1/subscriptions'],
-        'productGroups' => ['method' => 'GET', 'path' => '/v1/subscriptions/productGroups'],
-        'cancel' => ['method' => 'DELETE', 'path' => '/v1/subscriptions/{subscriptionId}'],
-        'get' => ['method' => 'GET', 'path' => '/v1/subscriptions/{subscriptionId}'],
-        'update' => ['method' => 'PATCH', 'path' => '/v1/subscriptions/{subscriptionId}'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);

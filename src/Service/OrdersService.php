@@ -7,11 +7,6 @@ final class OrdersService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public const OPERATIONS = [
-        'list' => ['method' => 'GET', 'path' => '/v1/orders'],
-        'get' => ['method' => 'GET', 'path' => '/v1/orders/{orderId}'],
-    ];
-
     public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);
