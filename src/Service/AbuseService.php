@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Service;
+namespace CommunitySDKs\GoDaddy\Service;
 
 final class AbuseService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
 
-    public function __construct(\ZPMLabs\GoDaddy\ApiClient $client)
+    public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
         parent::__construct($client, self::BASE_URL);
     }

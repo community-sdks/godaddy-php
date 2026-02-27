@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy;
+namespace CommunitySDKs\GoDaddy;
 
 final class Config
 {

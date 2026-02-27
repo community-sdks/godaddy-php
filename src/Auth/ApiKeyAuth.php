@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Auth;
+namespace CommunitySDKs\GoDaddy\Auth;
 
-use ZPMLabs\GoDaddy\Config;
+use CommunitySDKs\GoDaddy\Config;
 
 final class ApiKeyAuth
 {

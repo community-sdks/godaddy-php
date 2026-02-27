@@ -1,23 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy;
+namespace CommunitySDKs\GoDaddy;
 
 use GuzzleHttp\Client as GuzzleClient;
-use ZPMLabs\GoDaddy\Http\GuzzleTransport;
-use ZPMLabs\GoDaddy\Http\TransportInterface;
-use ZPMLabs\GoDaddy\Service\AbuseService;
-use ZPMLabs\GoDaddy\Service\AftermarketService;
-use ZPMLabs\GoDaddy\Service\AgreementsService;
-use ZPMLabs\GoDaddy\Service\AnsService;
-use ZPMLabs\GoDaddy\Service\AuctionsService;
-use ZPMLabs\GoDaddy\Service\CertificatesService;
-use ZPMLabs\GoDaddy\Service\CountriesService;
-use ZPMLabs\GoDaddy\Service\DomainsService;
-use ZPMLabs\GoDaddy\Service\OrdersService;
-use ZPMLabs\GoDaddy\Service\ParkingService;
-use ZPMLabs\GoDaddy\Service\ShoppersService;
-use ZPMLabs\GoDaddy\Service\SubscriptionsService;
+use CommunitySDKs\GoDaddy\Http\GuzzleTransport;
+use CommunitySDKs\GoDaddy\Http\TransportInterface;
+use CommunitySDKs\GoDaddy\Service\AbuseService;
+use CommunitySDKs\GoDaddy\Service\AftermarketService;
+use CommunitySDKs\GoDaddy\Service\AgreementsService;
+use CommunitySDKs\GoDaddy\Service\AnsService;
+use CommunitySDKs\GoDaddy\Service\AuctionsService;
+use CommunitySDKs\GoDaddy\Service\CertificatesService;
+use CommunitySDKs\GoDaddy\Service\CountriesService;
+use CommunitySDKs\GoDaddy\Service\DomainsService;
+use CommunitySDKs\GoDaddy\Service\OrdersService;
+use CommunitySDKs\GoDaddy\Service\ParkingService;
+use CommunitySDKs\GoDaddy\Service\ShoppersService;
+use CommunitySDKs\GoDaddy\Service\SubscriptionsService;
 
 final class Client
 {

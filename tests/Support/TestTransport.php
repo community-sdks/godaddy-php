@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Tests\Support;
+namespace CommunitySDKs\GoDaddy\Tests\Support;
 
-use ZPMLabs\GoDaddy\Http\Request;
-use ZPMLabs\GoDaddy\Http\Response;
-use ZPMLabs\GoDaddy\Http\TransportInterface;
+use CommunitySDKs\GoDaddy\Http\Request;
+use CommunitySDKs\GoDaddy\Http\Response;
+use CommunitySDKs\GoDaddy\Http\TransportInterface;
 
 final class TestTransport implements TransportInterface
 {

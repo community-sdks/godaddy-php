@@ -1,6 +1,6 @@
 {
     "name": "community-sdks/godaddy-php",
-    "description": "Handwritten PHP SDK for the GoDaddy APIs in this repository.",
+    "description": "PHP SDK for the GoDaddy APIs in this repository.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ZPMLabs\\GoDaddy\\": "src/"
+            "CommunitySDKs\\GoDaddy\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ZPMLabs\\GoDaddy\\Tests\\": "tests/"
+            "CommunitySDKs\\GoDaddy\\Tests\\": "tests/"
         }
     },
     "scripts": {

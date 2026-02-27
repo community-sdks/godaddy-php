@@ -1,28 +1,28 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Tests;
+namespace CommunitySDKs\GoDaddy\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ZPMLabs\GoDaddy\Client;
-use ZPMLabs\GoDaddy\Config;
-use ZPMLabs\GoDaddy\Http\Response;
-use ZPMLabs\GoDaddy\Service\AbuseService;
-use ZPMLabs\GoDaddy\Service\AftermarketService;
-use ZPMLabs\GoDaddy\Service\AgreementsService;
-use ZPMLabs\GoDaddy\Service\AnsService;
-use ZPMLabs\GoDaddy\Service\AuctionsService;
-use ZPMLabs\GoDaddy\Service\CertificatesService;
-use ZPMLabs\GoDaddy\Service\CountriesService;
-use ZPMLabs\GoDaddy\Service\DomainsService;
-use ZPMLabs\GoDaddy\Service\OrdersService;
-use ZPMLabs\GoDaddy\Service\ParkingService;
-use ZPMLabs\GoDaddy\Service\ShoppersService;
-use ZPMLabs\GoDaddy\Service\SubscriptionsService;
-use ZPMLabs\GoDaddy\Tests\Support\TestTransport;
+use CommunitySDKs\GoDaddy\Client;
+use CommunitySDKs\GoDaddy\Config;
+use CommunitySDKs\GoDaddy\Http\Response;
+use CommunitySDKs\GoDaddy\Service\AbuseService;
+use CommunitySDKs\GoDaddy\Service\AftermarketService;
+use CommunitySDKs\GoDaddy\Service\AgreementsService;
+use CommunitySDKs\GoDaddy\Service\AnsService;
+use CommunitySDKs\GoDaddy\Service\AuctionsService;
+use CommunitySDKs\GoDaddy\Service\CertificatesService;
+use CommunitySDKs\GoDaddy\Service\CountriesService;
+use CommunitySDKs\GoDaddy\Service\DomainsService;
+use CommunitySDKs\GoDaddy\Service\OrdersService;
+use CommunitySDKs\GoDaddy\Service\ParkingService;
+use CommunitySDKs\GoDaddy\Service\ShoppersService;
+use CommunitySDKs\GoDaddy\Service\SubscriptionsService;
+use CommunitySDKs\GoDaddy\Tests\Support\TestTransport;
 
 final class GeneratedServicesTest extends TestCase
 {

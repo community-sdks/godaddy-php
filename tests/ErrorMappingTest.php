@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Tests;
+namespace CommunitySDKs\GoDaddy\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use ZPMLabs\GoDaddy\ApiClient;
-use ZPMLabs\GoDaddy\Config;
-use ZPMLabs\GoDaddy\Exception\NotFoundException;
-use ZPMLabs\GoDaddy\Exception\RateLimitException;
-use ZPMLabs\GoDaddy\Exception\ServerException;
-use ZPMLabs\GoDaddy\Exception\UnauthorizedException;
-use ZPMLabs\GoDaddy\Exception\ValidationException;
-use ZPMLabs\GoDaddy\Http\Response;
-use ZPMLabs\GoDaddy\Tests\Support\TestTransport;
+use CommunitySDKs\GoDaddy\ApiClient;
+use CommunitySDKs\GoDaddy\Config;
+use CommunitySDKs\GoDaddy\Exception\NotFoundException;
+use CommunitySDKs\GoDaddy\Exception\RateLimitException;
+use CommunitySDKs\GoDaddy\Exception\ServerException;
+use CommunitySDKs\GoDaddy\Exception\UnauthorizedException;
+use CommunitySDKs\GoDaddy\Exception\ValidationException;
+use CommunitySDKs\GoDaddy\Http\Response;
+use CommunitySDKs\GoDaddy\Tests\Support\TestTransport;
 
 final class ErrorMappingTest extends TestCase
 {

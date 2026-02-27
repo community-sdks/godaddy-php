@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy;
+namespace CommunitySDKs\GoDaddy;
 
 use JsonException;
-use ZPMLabs\GoDaddy\Auth\ApiKeyAuth;
-use ZPMLabs\GoDaddy\Exception\ApiException;
-use ZPMLabs\GoDaddy\Exception\NotFoundException;
-use ZPMLabs\GoDaddy\Exception\RateLimitException;
-use ZPMLabs\GoDaddy\Exception\ServerException;
-use ZPMLabs\GoDaddy\Exception\UnauthorizedException;
-use ZPMLabs\GoDaddy\Exception\ValidationException;
-use ZPMLabs\GoDaddy\Http\Request;
-use ZPMLabs\GoDaddy\Http\Response;
-use ZPMLabs\GoDaddy\Http\TransportInterface;
+use CommunitySDKs\GoDaddy\Auth\ApiKeyAuth;
+use CommunitySDKs\GoDaddy\Exception\ApiException;
+use CommunitySDKs\GoDaddy\Exception\NotFoundException;
+use CommunitySDKs\GoDaddy\Exception\RateLimitException;
+use CommunitySDKs\GoDaddy\Exception\ServerException;
+use CommunitySDKs\GoDaddy\Exception\UnauthorizedException;
+use CommunitySDKs\GoDaddy\Exception\ValidationException;
+use CommunitySDKs\GoDaddy\Http\Request;
+use CommunitySDKs\GoDaddy\Http\Response;
+use CommunitySDKs\GoDaddy\Http\TransportInterface;
 
 final class ApiClient
 {

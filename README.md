@@ -1,15 +1,14 @@
-# GoDaddy PHP SDK
+# Unofficial GoDaddy PHP SDK
 
 ## Getting Started
 
 ```bash
-cd godaddy/godaddy-php
-composer install
+composer require community-sdks/godaddy-php
 ```
 
 ```php
-use ZPMLabs\GoDaddy\Client;
-use ZPMLabs\GoDaddy\Config;
+use CommunitySDKs\GoDaddy\Client;
+use CommunitySDKs\GoDaddy\Config;
 
 $client = new Client(new Config(
     apiKey: 'your-key',

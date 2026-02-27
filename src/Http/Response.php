@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Http;
+namespace CommunitySDKs\GoDaddy\Http;
 
 final class Response
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Http;
+namespace CommunitySDKs\GoDaddy\Http;
 
 final class Request
 {
@@ -18,7 +18,7 @@ final class Request
 
     public function fullUrl(): string
     {
-        $query = \ZPMLabs\GoDaddy\ApiClient::buildQueryString($this->query);
+        $query = \CommunitySDKs\GoDaddy\ApiClient::buildQueryString($this->query);
 
         return $query === '' ? $this->url : $this->url . '?' . $query;
     }

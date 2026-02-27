@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Tests;
+namespace CommunitySDKs\GoDaddy\Tests;
 
 use PHPUnit\Framework\TestCase;
-use ZPMLabs\GoDaddy\ApiClient;
+use CommunitySDKs\GoDaddy\ApiClient;
 
 final class QueryEncodingTest extends TestCase
 {

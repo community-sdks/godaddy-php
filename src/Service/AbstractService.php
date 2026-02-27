@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ZPMLabs\GoDaddy\Service;
+namespace CommunitySDKs\GoDaddy\Service;
 
-use ZPMLabs\GoDaddy\ApiClient;
+use CommunitySDKs\GoDaddy\ApiClient;
 
 abstract class AbstractService
 {
