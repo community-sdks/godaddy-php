@@ -7,8 +7,8 @@ composer require community-sdks/godaddy-php
 ```
 
 ```php
-use ZPMLabs\\GoDaddy\\Client;
-use ZPMLabs\\GoDaddy\\Config;
+use CommunitySDKs\\GoDaddy\\Client;
+use CommunitySDKs\\GoDaddy\\Config;
 
 $client = new Client(new Config(
     apiKey: 'your-key',
