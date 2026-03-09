@@ -12,107 +12,107 @@ final class CertificatesService extends AbstractService
         parent::__construct($client, self::BASE_URL);
     }
 
-    public function certificate_create(array $certificateCreate, ?string $xMarketId = null): mixed
+    public function certificateCreate(array $certificateCreate, ?string $xMarketId = null): mixed
     {
         return $this->call('POST', '/v1/certificates', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
     }
 
-    public function certificate_validate(array $certificateCreate, ?string $xMarketId = null): mixed
+    public function certificateValidate(array $certificateCreate, ?string $xMarketId = null): mixed
     {
         return $this->call('POST', '/v1/certificates/validate', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
     }
 
-    public function certificate_get(string $certificateId): mixed
+    public function certificateGet(string $certificateId): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}', pathParams: compact('certificateId'));
     }
 
-    public function certificate_action_retrieve(string $certificateId): mixed
+    public function certificateActionRetrieve(string $certificateId): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}/actions', pathParams: compact('certificateId'));
     }
 
-    public function certificate_resend_email(string $certificateId, string $emailId): mixed
+    public function certificateResendEmail(string $certificateId, string $emailId): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend', pathParams: compact('certificateId', 'emailId'));
     }
 
-    public function certificate_alternate_email_address(string $certificateId, string $emailAddress): mixed
+    public function certificateAlternateEmailAddress(string $certificateId, string $emailAddress): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/email/resend/{emailAddress}', pathParams: compact('certificateId', 'emailAddress'));
     }
 
-    public function certificate_resend_email_address(string $certificateId, string $emailId, string $emailAddress): mixed
+    public function certificateResendEmailAddress(string $certificateId, string $emailId, string $emailAddress): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend/{emailAddress}', pathParams: compact('certificateId', 'emailId', 'emailAddress'));
     }
 
-    public function certificate_email_history(string $certificateId): mixed
+    public function certificateEmailHistory(string $certificateId): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}/email/history', pathParams: compact('certificateId'));
     }
 
-    public function certificate_callback_delete(string $certificateId): mixed
+    public function certificateCallbackDelete(string $certificateId): mixed
     {
         return $this->call('DELETE', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
     }
 
-    public function certificate_callback_get(string $certificateId): mixed
+    public function certificateCallbackGet(string $certificateId): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
     }
 
-    public function certificate_callback_replace(string $certificateId, string $callbackUrl): mixed
+    public function certificateCallbackReplace(string $certificateId, string $callbackUrl): mixed
     {
         return $this->call('PUT', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'), queryParams: compact('callbackUrl'));
     }
 
-    public function certificate_cancel(string $certificateId): mixed
+    public function certificateCancel(string $certificateId): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/cancel', pathParams: compact('certificateId'));
     }
 
-    public function certificate_download(string $certificateId): mixed
+    public function certificateDownload(string $certificateId): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}/download', pathParams: compact('certificateId'));
     }
 
-    public function certificate_reissue(string $certificateId, array $reissueCreate): mixed
+    public function certificateReissue(string $certificateId, array $reissueCreate): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/reissue', pathParams: compact('certificateId'), body: $reissueCreate);
     }
 
-    public function certificate_renew(string $certificateId, array $renewCreate): mixed
+    public function certificateRenew(string $certificateId, array $renewCreate): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/renew', pathParams: compact('certificateId'), body: $renewCreate);
     }
 
-    public function certificate_revoke(string $certificateId, array $certificateRevoke): mixed
+    public function certificateRevoke(string $certificateId, array $certificateRevoke): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/revoke', pathParams: compact('certificateId'), body: $certificateRevoke);
     }
 
-    public function certificate_siteseal_get(string $certificateId, mixed $theme = null, mixed $locale = null): mixed
+    public function certificateSitesealGet(string $certificateId, mixed $theme = null, mixed $locale = null): mixed
     {
         return $this->call('GET', '/v1/certificates/{certificateId}/siteSeal', pathParams: compact('certificateId'), queryParams: compact('theme', 'locale'));
     }
 
-    public function certificate_verifydomaincontrol(string $certificateId): mixed
+    public function certificateVerifyDomainControl(string $certificateId): mixed
     {
         return $this->call('POST', '/v1/certificates/{certificateId}/verifyDomainControl', pathParams: compact('certificateId'));
     }
 
-    public function certificate_get_entitlement(string $entitlementId, ?bool $latest = null): mixed
+    public function certificateGetEntitlement(string $entitlementId, ?bool $latest = null): mixed
     {
         return $this->call('GET', '/v2/certificates', queryParams: compact('entitlementId', 'latest'));
     }
 
-    public function certificate_create_v2(array $subscriptionCertificateCreate, ?string $xMarketId = null): mixed
+    public function certificateCreateV2(array $subscriptionCertificateCreate, ?string $xMarketId = null): mixed
     {
         return $this->call('POST', '/v2/certificates', headers: ['X-Market-Id' => $xMarketId], body: $subscriptionCertificateCreate);
     }
 
-    public function certificate_download_entitlement(string $entitlementId): mixed
+    public function certificateDownloadEntitlement(string $entitlementId): mixed
     {
         return $this->call('GET', '/v2/certificates/download', queryParams: compact('entitlementId'));
     }

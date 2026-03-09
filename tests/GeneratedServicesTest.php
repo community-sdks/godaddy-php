@@ -67,6 +67,16 @@ final class GeneratedServicesTest extends TestCase
         }
     }
 
+    public function test_service_methods_use_camel_case_names(): void
+    {
+        foreach (self::SERVICES as $serviceClass => $_accessor) {
+            foreach ($this->publicServiceMethods($serviceClass) as $methodName) {
+                self::assertStringNotContainsString('__', $methodName, $serviceClass . '::' . $methodName);
+                self::assertMatchesRegularExpression('/^[a-z][a-zA-Z0-9]*$/', $methodName, $serviceClass . '::' . $methodName);
+            }
+        }
+    }
+
     private function buildArgsFromReflection(object $service, string $methodName): array
     {
         $method = new ReflectionMethod($service, $methodName);

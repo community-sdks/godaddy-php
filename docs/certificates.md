@@ -4,7 +4,7 @@ This document covers the Certificates service in the GoDaddy PHP SDK. It wraps t
 
 Client accessor: ``$client->certificates()``
 
-## certificate_create
+## certificateCreate
 
 Create a pending order for certificate
 
@@ -15,7 +15,7 @@ Create a pending order for certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_create(
+$response = $client->certificates()->certificateCreate(
     certificateCreate: ['sample'],
     xMarketId: 'header-value',
 );
@@ -33,7 +33,7 @@ $response = $client->certificates()->certificate_create(
 }
 ```
 
-## certificate_validate
+## certificateValidate
 
 Validate a pending order for certificate
 
@@ -44,7 +44,7 @@ Validate a pending order for certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_validate(
+$response = $client->certificates()->certificateValidate(
     certificateCreate: ['sample'],
     xMarketId: 'header-value',
 );
@@ -62,7 +62,7 @@ $response = $client->certificates()->certificate_validate(
 }
 ```
 
-## certificate_get
+## certificateGet
 
 Retrieve certificate details
 
@@ -73,7 +73,7 @@ Retrieve certificate details
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_get(
+$response = $client->certificates()->certificateGet(
     certificateId: 'sample',
 );
 ```
@@ -90,7 +90,7 @@ $response = $client->certificates()->certificate_get(
 }
 ```
 
-## certificate_action_retrieve
+## certificateActionRetrieve
 
 Retrieve all certificate actions
 
@@ -101,7 +101,7 @@ Retrieve all certificate actions
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_action_retrieve(
+$response = $client->certificates()->certificateActionRetrieve(
     certificateId: 'sample',
 );
 ```
@@ -118,7 +118,7 @@ $response = $client->certificates()->certificate_action_retrieve(
 }
 ```
 
-## certificate_resend_email
+## certificateResendEmail
 
 Resend an email
 
@@ -129,7 +129,7 @@ Resend an email
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_resend_email(
+$response = $client->certificates()->certificateResendEmail(
     certificateId: 'sample',
     emailId: 'sample',
 );
@@ -147,7 +147,7 @@ $response = $client->certificates()->certificate_resend_email(
 }
 ```
 
-## certificate_alternate_email_address
+## certificateAlternateEmailAddress
 
 Add alternate email address
 
@@ -158,7 +158,7 @@ Add alternate email address
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_alternate_email_address(
+$response = $client->certificates()->certificateAlternateEmailAddress(
     certificateId: 'sample',
     emailAddress: 'sample',
 );
@@ -176,7 +176,7 @@ $response = $client->certificates()->certificate_alternate_email_address(
 }
 ```
 
-## certificate_resend_email_address
+## certificateResendEmail_address
 
 Resend email to email address
 
@@ -187,7 +187,7 @@ Resend email to email address
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_resend_email_address(
+$response = $client->certificates()->certificateResendEmailAddress(
     certificateId: 'sample',
     emailId: 'sample',
     emailAddress: 'sample',
@@ -206,7 +206,7 @@ $response = $client->certificates()->certificate_resend_email_address(
 }
 ```
 
-## certificate_email_history
+## certificateEmailHistory
 
 Retrieve email history
 
@@ -217,7 +217,7 @@ Retrieve email history
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_email_history(
+$response = $client->certificates()->certificateEmailHistory(
     certificateId: 'sample',
 );
 ```
@@ -234,7 +234,7 @@ $response = $client->certificates()->certificate_email_history(
 }
 ```
 
-## certificate_callback_delete
+## certificateCallbackDelete
 
 Unregister system callback
 
@@ -245,7 +245,7 @@ Unregister system callback
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_callback_delete(
+$response = $client->certificates()->certificateCallbackDelete(
     certificateId: 'sample',
 );
 ```
@@ -262,7 +262,7 @@ $response = $client->certificates()->certificate_callback_delete(
 }
 ```
 
-## certificate_callback_get
+## certificateCallbackGet
 
 Retrieve system stateful action callback url
 
@@ -273,7 +273,7 @@ Retrieve system stateful action callback url
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_callback_get(
+$response = $client->certificates()->certificateCallbackGet(
     certificateId: 'sample',
 );
 ```
@@ -290,7 +290,7 @@ $response = $client->certificates()->certificate_callback_get(
 }
 ```
 
-## certificate_callback_replace
+## certificateCallbackReplace
 
 Register of certificate action callback
 
@@ -301,7 +301,7 @@ Register of certificate action callback
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_callback_replace(
+$response = $client->certificates()->certificateCallbackReplace(
     certificateId: 'sample',
     callbackUrl: 'sample',
 );
@@ -319,7 +319,7 @@ $response = $client->certificates()->certificate_callback_replace(
 }
 ```
 
-## certificate_cancel
+## certificateCancel
 
 Cancel a pending certificate
 
@@ -330,7 +330,7 @@ Cancel a pending certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_cancel(
+$response = $client->certificates()->certificateCancel(
     certificateId: 'sample',
 );
 ```
@@ -347,7 +347,7 @@ $response = $client->certificates()->certificate_cancel(
 }
 ```
 
-## certificate_download
+## certificateDownload
 
 Download certificate
 
@@ -358,7 +358,7 @@ Download certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_download(
+$response = $client->certificates()->certificateDownload(
     certificateId: 'sample',
 );
 ```
@@ -375,7 +375,7 @@ $response = $client->certificates()->certificate_download(
 }
 ```
 
-## certificate_reissue
+## certificateReissue
 
 Reissue active certificate
 
@@ -386,7 +386,7 @@ Reissue active certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_reissue(
+$response = $client->certificates()->certificateReissue(
     certificateId: 'sample',
     reissueCreate: ['sample'],
 );
@@ -404,7 +404,7 @@ $response = $client->certificates()->certificate_reissue(
 }
 ```
 
-## certificate_renew
+## certificateRenew
 
 Renew active certificate
 
@@ -415,7 +415,7 @@ Renew active certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_renew(
+$response = $client->certificates()->certificateRenew(
     certificateId: 'sample',
     renewCreate: ['sample'],
 );
@@ -433,7 +433,7 @@ $response = $client->certificates()->certificate_renew(
 }
 ```
 
-## certificate_revoke
+## certificateRevoke
 
 Revoke active certificate
 
@@ -444,7 +444,7 @@ Revoke active certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_revoke(
+$response = $client->certificates()->certificateRevoke(
     certificateId: 'sample',
     certificateRevoke: ['sample'],
 );
@@ -462,7 +462,7 @@ $response = $client->certificates()->certificate_revoke(
 }
 ```
 
-## certificate_siteseal_get
+## certificateSitesealGet
 
 Get Site seal
 
@@ -473,7 +473,7 @@ Get Site seal
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_siteseal_get(
+$response = $client->certificates()->certificateSitesealGet(
     certificateId: 'sample',
     theme: 'sample',
     locale: 'sample',
@@ -492,7 +492,7 @@ $response = $client->certificates()->certificate_siteseal_get(
 }
 ```
 
-## certificate_verifydomaincontrol
+## certificateVerifyDomainControl
 
 Check Domain Control
 
@@ -503,7 +503,7 @@ Check Domain Control
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_verifydomaincontrol(
+$response = $client->certificates()->certificateVerifyDomainControl(
     certificateId: 'sample',
 );
 ```
@@ -520,7 +520,7 @@ $response = $client->certificates()->certificate_verifydomaincontrol(
 }
 ```
 
-## certificate_get_entitlement
+## certificateGet_entitlement
 
 Search for certificate details by entitlement
 
@@ -531,7 +531,7 @@ Search for certificate details by entitlement
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_get_entitlement(
+$response = $client->certificates()->certificateGetEntitlement(
     entitlementId: 'sample',
     latest: true,
 );
@@ -549,7 +549,7 @@ $response = $client->certificates()->certificate_get_entitlement(
 }
 ```
 
-## certificate_create_v2
+## certificateCreate_v2
 
 Create a pending order for certificate
 
@@ -560,7 +560,7 @@ Create a pending order for certificate
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_create_v2(
+$response = $client->certificates()->certificateCreateV2(
     subscriptionCertificateCreate: ['sample'],
     xMarketId: 'header-value',
 );
@@ -578,7 +578,7 @@ $response = $client->certificates()->certificate_create_v2(
 }
 ```
 
-## certificate_download_entitlement
+## certificateDownload_entitlement
 
 Download certificate by entitlement
 
@@ -589,7 +589,7 @@ Download certificate by entitlement
 ### Input
 
 ```php
-$response = $client->certificates()->certificate_download_entitlement(
+$response = $client->certificates()->certificateDownloadEntitlement(
     entitlementId: 'sample',
 );
 ```

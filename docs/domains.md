@@ -128,7 +128,7 @@ $response = $client->domains()->availableBulk(
 }
 ```
 
-## ContactsValidate
+## contactsValidate
 
 Validate the request body using the Domain Contact Validation Schema for specified domains.
 
@@ -139,7 +139,7 @@ Validate the request body using the Domain Contact Validation Schema for specifi
 ### Input
 
 ```php
-$response = $client->domains()->ContactsValidate(
+$response = $client->domains()->contactsValidate(
     body: ['sample'],
     xPrivateLabelId: 'header-value',
     marketId: 'sample',
@@ -334,7 +334,7 @@ $response = $client->domains()->cancel(
 }
 ```
 
-## get
+## get (v1)
 
 Retrieve details for the specified Domain
 
@@ -669,7 +669,7 @@ $response = $client->domains()->recordReplaceType(
 }
 ```
 
-## renew
+## renew (v1)
 
 Renew the specified Domain
 
@@ -758,7 +758,7 @@ $response = $client->domains()->verifyEmail(
 }
 ```
 
-## get__v2_customers_customerId_domains_domain
+## get (v2 via customerId)
 
 Retrieve details for the specified Domain
 
@@ -768,7 +768,7 @@ Retrieve details for the specified Domain
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain(
+$response = $client->domains()->get(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -788,7 +788,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain(
 }
 ```
 
-## delete__v2_customers_customerId_domains_domain_changeOfRegistrant
+## cancelChangeOfRegistrant
 
 Cancels a pending change of registrant request for a given domain
 
@@ -798,7 +798,7 @@ Cancels a pending change of registrant request for a given domain
 ### Input
 
 ```php
-$response = $client->domains()->delete__v2_customers_customerId_domains_domain_changeOfRegistrant(
+$response = $client->domains()->cancelChangeOfRegistrant(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -817,7 +817,7 @@ $response = $client->domains()->delete__v2_customers_customerId_domains_domain_c
 }
 ```
 
-## get__v2_customers_customerId_domains_domain_changeOfRegistrant
+## getChangeOfRegistrant
 
 Retrieve change of registrant information
 
@@ -827,7 +827,7 @@ Retrieve change of registrant information
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain_changeOfRegistrant(
+$response = $client->domains()->getChangeOfRegistrant(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -846,7 +846,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain_chan
 }
 ```
 
-## patch__v2_customers_customerId_domains_domain_dnssecRecords
+## addDnssecRecords
 
 Add the specifed DNSSEC records to the domain
 
@@ -856,7 +856,7 @@ Add the specifed DNSSEC records to the domain
 ### Input
 
 ```php
-$response = $client->domains()->patch__v2_customers_customerId_domains_domain_dnssecRecords(
+$response = $client->domains()->addDnssecRecords(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -876,7 +876,7 @@ $response = $client->domains()->patch__v2_customers_customerId_domains_domain_dn
 }
 ```
 
-## delete__v2_customers_customerId_domains_domain_dnssecRecords
+## removeDnssecRecords
 
 Remove the specifed DNSSEC record from the domain
 
@@ -886,7 +886,7 @@ Remove the specifed DNSSEC record from the domain
 ### Input
 
 ```php
-$response = $client->domains()->delete__v2_customers_customerId_domains_domain_dnssecRecords(
+$response = $client->domains()->removeDnssecRecords(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -906,7 +906,7 @@ $response = $client->domains()->delete__v2_customers_customerId_domains_domain_d
 }
 ```
 
-## put__v2_customers_customerId_domains_domain_nameServers
+## replaceNameServers
 
 Replaces the existing name servers on the domain.
 
@@ -916,7 +916,7 @@ Replaces the existing name servers on the domain.
 ### Input
 
 ```php
-$response = $client->domains()->put__v2_customers_customerId_domains_domain_nameServers(
+$response = $client->domains()->replaceNameServers(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -936,7 +936,7 @@ $response = $client->domains()->put__v2_customers_customerId_domains_domain_name
 }
 ```
 
-## get__v2_customers_customerId_domains_domain_privacy_forwarding
+## getPrivacyForwarding
 
 Retrieve privacy email forwarding settings showing where emails are delivered
 
@@ -946,7 +946,7 @@ Retrieve privacy email forwarding settings showing where emails are delivered
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain_privacy_forwarding(
+$response = $client->domains()->getPrivacyForwarding(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -965,7 +965,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain_priv
 }
 ```
 
-## patch__v2_customers_customerId_domains_domain_privacy_forwarding
+## updatePrivacyForwarding
 
 Update privacy email forwarding settings to determine how emails are delivered
 
@@ -975,7 +975,7 @@ Update privacy email forwarding settings to determine how emails are delivered
 ### Input
 
 ```php
-$response = $client->domains()->patch__v2_customers_customerId_domains_domain_privacy_forwarding(
+$response = $client->domains()->updatePrivacyForwarding(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -995,7 +995,7 @@ $response = $client->domains()->patch__v2_customers_customerId_domains_domain_pr
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_redeem
+## redeem
 
 Purchase a restore for the given domain to bring it out of redemption
 
@@ -1005,7 +1005,7 @@ Purchase a restore for the given domain to bring it out of redemption
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_redeem(
+$response = $client->domains()->redeem(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1025,7 +1025,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_red
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_renew
+## renew (v2 via customerId)
 
 Renew the specified Domain
 
@@ -1035,7 +1035,7 @@ Renew the specified Domain
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_renew(
+$response = $client->domains()->renew(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1055,7 +1055,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_ren
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transfer
+## transfer
 
 Purchase and start or restart transfer process
 
@@ -1065,7 +1065,7 @@ Purchase and start or restart transfer process
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transfer(
+$response = $client->domains()->transfer(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1085,7 +1085,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## get__v2_customers_customerId_domains_domain_transfer
+## getTransfer
 
 Query the current transfer status
 
@@ -1095,7 +1095,7 @@ Query the current transfer status
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain_transfer(
+$response = $client->domains()->getTransfer(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1114,7 +1114,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain_tran
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transfer_validate
+## validateTransfer
 
 Validate the request body using the Domain Transfer Schema for the specified TLD
 
@@ -1124,7 +1124,7 @@ Validate the request body using the Domain Transfer Schema for the specified TLD
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transfer_validate(
+$response = $client->domains()->validateTransfer(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1144,7 +1144,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferInAccept
+## acceptTransferIn
 
 Accepts the transfer in
 
@@ -1154,7 +1154,7 @@ Accepts the transfer in
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferInAccept(
+$response = $client->domains()->acceptTransferIn(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1174,7 +1174,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferInCancel
+## cancelTransferIn
 
 Cancels the transfer in
 
@@ -1184,7 +1184,7 @@ Cancels the transfer in
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferInCancel(
+$response = $client->domains()->cancelTransferIn(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1203,7 +1203,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferInRestart
+## restartTransferIn
 
 Restarts transfer in request from the beginning
 
@@ -1213,7 +1213,7 @@ Restarts transfer in request from the beginning
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferInRestart(
+$response = $client->domains()->restartTransferIn(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1232,7 +1232,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferInRetry
+## retryTransferIn
 
 Retries the current transfer in request with supplied Authorization code
 
@@ -1242,7 +1242,7 @@ Retries the current transfer in request with supplied Authorization code
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferInRetry(
+$response = $client->domains()->retryTransferIn(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1262,7 +1262,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferOut
+## transferOut
 
 Initiate transfer out to another registrar for a .uk domain.
 
@@ -1272,7 +1272,7 @@ Initiate transfer out to another registrar for a .uk domain.
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferOut(
+$response = $client->domains()->transferOut(
     customerId: 'sample',
     domain: 'sample',
     registrar: 'sample',
@@ -1292,7 +1292,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferOutAccept
+## acceptTransferOut
 
 Accept transfer out
 
@@ -1302,7 +1302,7 @@ Accept transfer out
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferOutAccept(
+$response = $client->domains()->acceptTransferOut(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1321,7 +1321,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_domain_tra
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_transferOutReject
+## rejectTransferOut
 
 Reject transfer out
 
@@ -1331,7 +1331,7 @@ Reject transfer out
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_transferOutReject(
+$response = $client->domains()->rejectTransferOut(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1470,7 +1470,7 @@ $response = $client->domains()->domainsForwardsPost(
 }
 ```
 
-## get__v2_customers_customerId_domains_domain_actions
+## getActions
 
 Retrieves a list of the most recent actions for the specified domain
 
@@ -1480,7 +1480,7 @@ Retrieves a list of the most recent actions for the specified domain
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain_actions(
+$response = $client->domains()->getActions(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
@@ -1499,7 +1499,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain_acti
 }
 ```
 
-## delete__v2_customers_customerId_domains_domain_actions_type
+## cancelAction
 
 Cancel the most recent user action for the specified domain
 
@@ -1509,7 +1509,7 @@ Cancel the most recent user action for the specified domain
 ### Input
 
 ```php
-$response = $client->domains()->delete__v2_customers_customerId_domains_domain_actions_type(
+$response = $client->domains()->cancelAction(
     customerId: 'sample',
     domain: 'sample',
     type: 'sample',
@@ -1529,7 +1529,7 @@ $response = $client->domains()->delete__v2_customers_customerId_domains_domain_a
 }
 ```
 
-## get__v2_customers_customerId_domains_domain_actions_type
+## getAction
 
 Retrieves the most recent action for the specified domain
 
@@ -1539,7 +1539,7 @@ Retrieves the most recent action for the specified domain
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_domain_actions_type(
+$response = $client->domains()->getAction(
     customerId: 'sample',
     domain: 'sample',
     type: 'sample',
@@ -1559,7 +1559,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_domain_acti
 }
 ```
 
-## get__v2_customers_customerId_domains_notifications
+## getNotifications
 
 Retrieve the next domain notification
 
@@ -1569,7 +1569,7 @@ Retrieve the next domain notification
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_notifications(
+$response = $client->domains()->getNotifications(
     customerId: 'sample',
     xRequestId: 'header-value',
 );
@@ -1587,7 +1587,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_notificatio
 }
 ```
 
-## get__v2_customers_customerId_domains_notifications_optIn
+## getNotificationOptIn
 
 Retrieve a list of notification types that are opted in
 
@@ -1597,7 +1597,7 @@ Retrieve a list of notification types that are opted in
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_notifications_optIn(
+$response = $client->domains()->getNotificationOptIn(
     customerId: 'sample',
     xRequestId: 'header-value',
 );
@@ -1615,7 +1615,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_notificatio
 }
 ```
 
-## put__v2_customers_customerId_domains_notifications_optIn
+## updateNotificationOptIn
 
 Opt in to recieve notifications for the submitted notification types
 
@@ -1625,7 +1625,7 @@ Opt in to recieve notifications for the submitted notification types
 ### Input
 
 ```php
-$response = $client->domains()->put__v2_customers_customerId_domains_notifications_optIn(
+$response = $client->domains()->updateNotificationOptIn(
     customerId: 'sample',
     types: ['sample'],
     xRequestId: 'header-value',
@@ -1644,7 +1644,7 @@ $response = $client->domains()->put__v2_customers_customerId_domains_notificatio
 }
 ```
 
-## get__v2_customers_customerId_domains_notifications_schemas_type
+## getNotificationSchema
 
 Retrieve the schema for the notification data for the specified notification type
 
@@ -1654,7 +1654,7 @@ Retrieve the schema for the notification data for the specified notification typ
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_notifications_schemas_type(
+$response = $client->domains()->getNotificationSchema(
     customerId: 'sample',
     type: 'sample',
     xRequestId: 'header-value',
@@ -1673,7 +1673,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_notificatio
 }
 ```
 
-## post__v2_customers_customerId_domains_notifications_notificationId_acknowledge
+## acknowledgeNotification
 
 Acknowledge a domain notification
 
@@ -1683,7 +1683,7 @@ Acknowledge a domain notification
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_notifications_notificationId_acknowledge(
+$response = $client->domains()->acknowledgeNotification(
     customerId: 'sample',
     notificationId: 'sample',
     xRequestId: 'header-value',
@@ -1702,7 +1702,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_notificati
 }
 ```
 
-## post__v2_customers_customerId_domains_register
+## register
 
 Purchase and register the specified Domain
 
@@ -1712,7 +1712,7 @@ Purchase and register the specified Domain
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_register(
+$response = $client->domains()->register(
     customerId: 'sample',
     body: ['sample'],
     xRequestId: 'header-value',
@@ -1731,7 +1731,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_register(
 }
 ```
 
-## get__v2_customers_customerId_domains_register_schema_tld
+## registerSchema
 
 Retrieve the schema to be submitted when registering a Domain for the specified TLD
 
@@ -1741,7 +1741,7 @@ Retrieve the schema to be submitted when registering a Domain for the specified 
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_customers_customerId_domains_register_schema_tld(
+$response = $client->domains()->registerSchema(
     customerId: 'sample',
     tld: 'sample',
     xRequestId: 'header-value',
@@ -1760,7 +1760,7 @@ $response = $client->domains()->get__v2_customers_customerId_domains_register_sc
 }
 ```
 
-## post__v2_customers_customerId_domains_register_validate
+## validateRegistration
 
 Validate the request body using the Domain Registration Schema for the specified TLD
 
@@ -1770,7 +1770,7 @@ Validate the request body using the Domain Registration Schema for the specified
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_register_validate(
+$response = $client->domains()->validateRegistration(
     customerId: 'sample',
     body: ['sample'],
     xRequestId: 'header-value',
@@ -1789,7 +1789,7 @@ $response = $client->domains()->post__v2_customers_customerId_domains_register_v
 }
 ```
 
-## get__v2_domains_maintenances
+## listMaintenances
 
 Retrieve a list of upcoming system Maintenances
 
@@ -1799,7 +1799,7 @@ Retrieve a list of upcoming system Maintenances
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_domains_maintenances(
+$response = $client->domains()->listMaintenances(
     xRequestId: 'header-value',
     status: 'sample',
     modifiedAtAfter: 'sample',
@@ -1820,7 +1820,7 @@ $response = $client->domains()->get__v2_domains_maintenances(
 }
 ```
 
-## get__v2_domains_maintenances_maintenanceId
+## getMaintenance
 
 Retrieve the details for an upcoming system Maintenances
 
@@ -1830,7 +1830,7 @@ Retrieve the details for an upcoming system Maintenances
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_domains_maintenances_maintenanceId(
+$response = $client->domains()->getMaintenance(
     maintenanceId: 'sample',
     xRequestId: 'header-value',
 );
@@ -1848,7 +1848,7 @@ $response = $client->domains()->get__v2_domains_maintenances_maintenanceId(
 }
 ```
 
-## get__v2_domains_usage_yyyymm
+## getUsage
 
 Retrieve api usage request counts for a specific year/month.  The data is retained for a period of three months.
 
@@ -1858,7 +1858,7 @@ Retrieve api usage request counts for a specific year/month.  The data is retain
 ### Input
 
 ```php
-$response = $client->domains()->get__v2_domains_usage_yyyymm(
+$response = $client->domains()->getUsage(
     yyyymm: 'sample',
     xRequestId: 'header-value',
     includes: ['sample'],
@@ -1877,7 +1877,7 @@ $response = $client->domains()->get__v2_domains_usage_yyyymm(
 }
 ```
 
-## patch__v2_customers_customerId_domains_domain_contacts
+## updateContacts (v2 via customerId)
 
 Update domain contacts
 
@@ -1887,7 +1887,7 @@ Update domain contacts
 ### Input
 
 ```php
-$response = $client->domains()->patch__v2_customers_customerId_domains_domain_contacts(
+$response = $client->domains()->updateContacts(
     customerId: 'sample',
     domain: 'sample',
     body: ['sample'],
@@ -1907,7 +1907,7 @@ $response = $client->domains()->patch__v2_customers_customerId_domains_domain_co
 }
 ```
 
-## post__v2_customers_customerId_domains_domain_regenerateAuthCode
+## regenerateAuthCode
 
 Regenerate the auth code for the given domain
 
@@ -1917,7 +1917,7 @@ Regenerate the auth code for the given domain
 ### Input
 
 ```php
-$response = $client->domains()->post__v2_customers_customerId_domains_domain_regenerateAuthCode(
+$response = $client->domains()->regenerateAuthCode(
     customerId: 'sample',
     domain: 'sample',
     xRequestId: 'header-value',
