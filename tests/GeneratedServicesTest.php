@@ -86,7 +86,7 @@ final class GeneratedServicesTest extends TestCase
         }
 
         if (!$type->isBuiltin()) {
-            return 'sample';
+            return $this->sampleObjectValue($type->getName());
         }
 
         return match ($type->getName()) {
@@ -96,6 +96,35 @@ final class GeneratedServicesTest extends TestCase
             'array' => ['sample'],
             default => 'sample',
         };
+    }
+
+    private function sampleObjectValue(string $className): object
+    {
+        if (method_exists($className, 'sample')) {
+            /** @var object $sample */
+            $sample = $className::sample();
+            return $sample;
+        }
+
+        $reflection = new \ReflectionClass($className);
+        if ($reflection->isEnum()) {
+            $cases = $className::cases();
+            return $cases[0];
+        }
+
+        $constructor = $reflection->getConstructor();
+        if ($constructor === null || $constructor->getNumberOfRequiredParameters() === 0) {
+            return $reflection->newInstance();
+        }
+
+        $args = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $args[] = $parameter->isDefaultValueAvailable()
+                ? $parameter->getDefaultValue()
+                : $this->sampleValueFromParameter($parameter);
+        }
+
+        return $reflection->newInstanceArgs($args);
     }
 
     /**

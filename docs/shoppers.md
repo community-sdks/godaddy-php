@@ -4,6 +4,8 @@ This document covers the Shoppers service in the GoDaddy PHP SDK. It wraps the *
 
 Client accessor: ``$client->shoppers()``
 
+All shopper methods now use typed request DTOs and return typed response DTOs.
+
 ## createSubaccount
 
 Create a Subaccount owned by the authenticated Reseller
@@ -12,24 +14,28 @@ Create a Subaccount owned by the authenticated Reseller
 - Path: ``/v1/shoppers/subaccount``
 - Swagger operationId: ``createSubaccount``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\CreateSubaccountRequest;
+
 $response = $client->shoppers()->createSubaccount(
-    subaccount: ['sample'],
+  request: new CreateSubaccountRequest(
+    email: 'shopper@example.com',
+    password: 'P@55w0rd+',
+    nameFirst: 'Jane',
+    nameLast: 'Doe',
+    marketId: 'en-US',
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "POST",
-  "path": "/v1/shoppers/subaccount",
-  "summary": "Create a Subaccount owned by the authenticated Reseller",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\ShopperIdResponse
+$response->shopperId;
+$response->customerId;
 ```
 
 ## get
@@ -40,25 +46,30 @@ Get details for the specified Shopper
 - Path: ``/v1/shoppers/{shopperId}``
 - Swagger operationId: ``get``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\GetShopperRequest;
+
 $response = $client->shoppers()->get(
-    shopperId: ['sample' => true],
-    includes: ['sample'],
+  request: new GetShopperRequest(
+    shopperId: '1234567890',
+    includes: ['customerId'],
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/shoppers/{shopperId}",
-  "summary": "Get details for the specified Shopper",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\ShopperResponse
+$response->shopperId;
+$response->nameFirst;
+$response->nameLast;
+$response->email;
+$response->marketId;
+$response->customerId;
+$response->externalId;
 ```
 
 ## update
@@ -69,25 +80,27 @@ Update details for the specified Shopper
 - Path: ``/v1/shoppers/{shopperId}``
 - Swagger operationId: ``update``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\UpdateShopperRequest;
+
 $response = $client->shoppers()->update(
-    shopperId: ['sample' => true],
-    shopper: ['sample'],
+  request: new UpdateShopperRequest(
+    shopperId: '1234567890',
+    email: 'new-email@example.com',
+    nameFirst: 'Jane',
+    nameLast: 'Doe',
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "POST",
-  "path": "/v1/shoppers/{shopperId}",
-  "summary": "Update details for the specified Shopper",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\ShopperIdResponse
+$response->shopperId;
+$response->customerId;
 ```
 
 ## delete
@@ -98,25 +111,24 @@ Request the deletion of a shopper profile
 - Path: ``/v1/shoppers/{shopperId}``
 - Swagger operationId: ``delete``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\DeleteShopperRequest;
+
 $response = $client->shoppers()->delete(
-    shopperId: ['sample' => true],
-    auditClientIp: 'sample',
+  request: new DeleteShopperRequest(
+    shopperId: '1234567890',
+    auditClientIp: '127.0.0.1',
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "DELETE",
-  "path": "/v1/shoppers/{shopperId}",
-  "summary": "Request the deletion of a shopper profile",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\DeleteShopperResponse
+$response instanceof \CommunitySDKs\GoDaddy\Dto\Shoppers\Response\DeleteShopperResponse;
 ```
 
 ## getStatus
@@ -127,25 +139,24 @@ Get details for the specified Shopper
 - Path: ``/v1/shoppers/{shopperId}/status``
 - Swagger operationId: ``getStatus``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\GetShopperStatusRequest;
+
 $response = $client->shoppers()->getStatus(
-    shopperId: ['sample' => true],
-    auditClientIp: 'sample',
+  request: new GetShopperStatusRequest(
+    shopperId: '1234567890',
+    auditClientIp: '127.0.0.1',
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/shoppers/{shopperId}/status",
-  "summary": "Get details for the specified Shopper",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\ShopperStatusResponse
+$response->billingState;
 ```
 
 ## changePassword
@@ -156,24 +167,40 @@ Set subaccount's password
 - Path: ``/v1/shoppers/{shopperId}/factors/password``
 - Swagger operationId: ``changePassword``
 
-### Input
+### Input (DTO)
 
 ```php
+use CommunitySDKs\GoDaddy\Dto\Shoppers\Request\ChangePasswordRequest;
+
 $response = $client->shoppers()->changePassword(
-    shopperId: ['sample' => true],
-    secret: ['sample'],
+  request: new ChangePasswordRequest(
+    shopperId: '1234567890',
+    secret: 'P@55w0rd+',
+  ),
 );
 ```
 
-### Output
+### Output (DTO)
 
-```json
-{
-  "ok": true,
-  "method": "PUT",
-  "path": "/v1/shoppers/{shopperId}/factors/password",
-  "summary": "Set subaccount's password",
-  "data": {}
-}
+```php
+// CommunitySDKs\GoDaddy\Dto\Shoppers\Response\ShopperIdResponse
+$response->shopperId;
+$response->customerId;
 ```
+
+## Shopper Exceptions
+
+Shopper endpoints now throw dedicated typed exceptions under ``CommunitySDKs\GoDaddy\Exception\Shoppers\*``.
+
+- ``ShoppersBadRequestException``
+- ``ShoppersUnauthorizedException``
+- ``ShoppersForbiddenException``
+- ``ShoppersNotFoundException``
+- ``ShoppersConflictException``
+- ``ShoppersUnprocessableEntityException``
+- ``ShoppersRateLimitException``
+- ``ShoppersServerException``
+- ``ShoppersPasswordPolicyException``
+
+Each exception extends ``ShoppersApiException`` and exposes ``getErrorResponse()`` with a typed error DTO.
 
