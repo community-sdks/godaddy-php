@@ -1,75 +1,42 @@
 # Orders Service
 
-This document covers the Orders service in the GoDaddy PHP SDK. It wraps the **GoDaddy API** endpoints from the provided Swagger file.
+This document covers the Orders service in the GoDaddy PHP SDK.
 
-Client accessor: ``$client->orders()``
+Client accessor: `$client->orders()`
 
-## list
+All methods now use typed request DTOs and typed response DTOs.
 
-Retrieve a list of orders for the authenticated shopper. Only one filter may be used at a time
+## Methods
 
-- HTTP method: ``GET``
-- Path: ``/v1/orders``
-- Swagger operationId: ``list``
+- `list(ListOrdersRequest $request): OrderListResponse`
+- `get(GetOrderRequest $request): OrderResponse`
 
-### Input
+## Example
 
 ```php
-$response = $client->orders()->list(
-    xAppKey: 'header-value',
-    periodStart: 'sample',
-    periodEnd: 'sample',
-    domain: 'sample',
-    productGroupId: 'sample',
-    paymentProfileId: 'sample',
-    parentOrderId: 'sample',
-    offset: 1,
-    limit: 1,
-    sort: 'sample',
-    xShopperId: 'header-value',
-);
-```
+use CommunitySDKs\GoDaddy\Dto\Orders\Request\ListOrdersRequest;
 
-### Output
+$response = $client->orders()->list(new ListOrdersRequest(
+    xAppKey: 'app-key',
+    limit: 25,
+    sort: '-createdAt',
+));
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/orders",
-  "summary": "Retrieve a list of orders for the authenticated shopper. Only one filter may be used at a time",
-  "data": {}
+foreach ($response->orders as $order) {
+    echo $order->orderId . PHP_EOL;
 }
 ```
 
-## get
+## Exceptions
 
-Retrieve details for specified order
+Orders endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Orders\*`:
 
-- HTTP method: ``GET``
-- Path: ``/v1/orders/{orderId}``
-- Swagger operationId: ``get``
+- `OrdersBadRequestException`
+- `OrdersUnauthorizedException`
+- `OrdersForbiddenException`
+- `OrdersNotFoundException`
+- `OrdersRateLimitException`
+- `OrdersServerException`
+- `OrdersGatewayTimeoutException`
 
-### Input
-
-```php
-$response = $client->orders()->get(
-    orderId: 'sample',
-    xAppKey: 'header-value',
-    xShopperId: 'header-value',
-    xMarketId: 'header-value',
-);
-```
-
-### Output
-
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/orders/{orderId}",
-  "summary": "Retrieve details for specified order",
-  "data": {}
-}
-```
-
+Each exception extends `OrdersApiException` and exposes `getErrorResponse()`.
