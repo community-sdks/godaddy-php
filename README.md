@@ -7,12 +7,47 @@ composer require community-sdks/godaddy-php
 ```
 
 ```php
-use ZPMLabs\\GoDaddy\\Client;
-use ZPMLabs\\GoDaddy\\Config;
+use CommunitySDKs\\GoDaddy\\Client;
+use CommunitySDKs\\GoDaddy\\Config;
 
 $client = new Client(new Config(
     apiKey: 'your-key',
     apiSecret: 'your-secret',
+));
+```
+
+## Environment Base URLs
+
+The SDK defaults to sandbox (OTE): `https://api.ote-godaddy.com`.
+
+Use production for all services:
+
+```php
+$client = new Client(Config::production(
+    apiKey: 'your-key',
+    apiSecret: 'your-secret'
+));
+```
+
+Use sandbox explicitly:
+
+```php
+$client = new Client(Config::sandbox(
+    apiKey: 'your-key',
+    apiSecret: 'your-secret'
+));
+```
+
+Override base URL for specific services (keys: `abuse`, `aftermarket`, `agreements`, `ans`, `auctions`, `certificates`, `countries`, `domains`, `orders`, `parking`, `shoppers`, `subscriptions`):
+
+```php
+$client = new Client(new Config(
+    apiKey: 'your-key',
+    apiSecret: 'your-secret',
+    baseUrl: Config::PRODUCTION_BASE_URL,
+    serviceBaseUrls: [
+        'abuse' => 'https://api.ote-godaddy.com',
+    ]
 ));
 ```
 

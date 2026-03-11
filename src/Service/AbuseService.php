@@ -25,7 +25,7 @@ final class AbuseService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'abuse');
     }
 
     public function getTickets(GetTicketsRequest $request): AbuseResponse

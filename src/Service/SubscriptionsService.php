@@ -31,7 +31,7 @@ final class SubscriptionsService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'subscriptions');
     }
 
     public function list(ListSubscriptionsRequest $request): SubscriptionListResponse

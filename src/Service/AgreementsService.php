@@ -21,7 +21,7 @@ final class AgreementsService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'agreements');
     }
 
     public function get(GetAgreementsRequest $request): AgreementsListResponse

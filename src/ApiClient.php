@@ -49,6 +49,7 @@ final class ApiClient
     public function request(
         string $method,
         string $serviceBaseUrl,
+        ?string $serviceName,
         string $path,
         array $pathParams = [],
         array $queryParams = [],
@@ -56,9 +57,11 @@ final class ApiClient
         mixed $body = null,
         bool $multipart = false
     ): mixed {
+        $baseUrl = $this->resolveBaseUrl($serviceBaseUrl, $serviceName);
+
         $request = new Request(
             method: $method,
-            url: rtrim($this->config->baseUrl ?? $serviceBaseUrl, '/') . $this->interpolatePath($path, $pathParams),
+            url: rtrim($baseUrl, '/') . $this->interpolatePath($path, $pathParams),
             headers: $this->buildHeaders($headers, $body, $multipart),
             query: array_filter($queryParams, static fn (mixed $value): bool => $value !== null),
             body: $body,
@@ -73,6 +76,22 @@ final class ApiClient
         }
 
         return $this->decodeResponse($response);
+    }
+
+    private function resolveBaseUrl(string $serviceBaseUrl, ?string $serviceName): string
+    {
+        if ($serviceName !== null) {
+            $serviceOverride = $this->config->serviceBaseUrls[$serviceName] ?? null;
+            if (is_string($serviceOverride) && $serviceOverride !== '') {
+                return $serviceOverride;
+            }
+        }
+
+        if (is_string($this->config->baseUrl) && $this->config->baseUrl !== '') {
+            return $this->config->baseUrl;
+        }
+
+        return $serviceBaseUrl;
     }
 
     private function buildHeaders(array $headers, mixed $body, bool $multipart): array

@@ -25,7 +25,7 @@ final class OrdersService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'orders');
     }
 
     public function list(ListOrdersRequest $request): OrderListResponse

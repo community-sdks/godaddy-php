@@ -21,7 +21,7 @@ final class AuctionsService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'auctions');
     }
 
     public function placeBids(PlaceBidsRequest $request): PlaceBidsResponse

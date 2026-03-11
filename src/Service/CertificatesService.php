@@ -51,7 +51,7 @@ final class CertificatesService extends AbstractService
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL);
+        parent::__construct($client, self::BASE_URL, 'certificates');
     }
 
     public function create(CreateCertificateRequest $request): CertificatesResponse
