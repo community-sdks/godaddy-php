@@ -1,36 +1,40 @@
 # Agreements Service
 
-This document covers the Agreements service in the GoDaddy PHP SDK. It wraps the **GoDaddy API** endpoints from the provided Swagger file.
+This document covers the Agreements service in the GoDaddy PHP SDK.
 
-Client accessor: ``$client->agreements()``
+Client accessor: `$client->agreements()`
 
-## get
+All methods now use typed request DTOs and typed response DTOs.
 
-Retrieve Legal Agreements for provided agreements keys
+## Methods
 
-- HTTP method: ``GET``
-- Path: ``/v1/agreements``
-- Swagger operationId: ``get``
+- `get(GetAgreementsRequest $request): AgreementsListResponse`
 
-### Input
+## Example
 
 ```php
-$response = $client->agreements()->get(
-    keys: ['sample'],
-    xPrivateLabelId: 'header-value',
-    xMarketId: 'header-value',
-);
-```
+use CommunitySDKs\GoDaddy\Dto\Agreements\Request\GetAgreementsRequest;
 
-### Output
+$response = $client->agreements()->get(new GetAgreementsRequest(
+  keys: ['DNRA'],
+  xPrivateLabelId: 1,
+  xMarketId: 'en-US'
+));
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/agreements",
-  "summary": "Retrieve Legal Agreements for provided agreements keys",
-  "data": {}
+foreach ($response->agreements as $agreement) {
+  echo $agreement->agreementKey . PHP_EOL;
 }
 ```
+
+## Exceptions
+
+Agreements endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Agreements\*`:
+
+- `AgreementsBadRequestException`
+- `AgreementsUnauthorizedException`
+- `AgreementsForbiddenException`
+- `AgreementsRateLimitException`
+- `AgreementsServerException`
+
+Each exception extends `AgreementsApiException` and exposes `getErrorResponse()`.
 
