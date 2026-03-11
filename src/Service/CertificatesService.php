@@ -3,6 +3,48 @@ declare(strict_types=1);
 
 namespace CommunitySDKs\GoDaddy\Service;
 
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\AddAlternateEmailAddressRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\CancelCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\CreateCertificateForEntitlementRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\CreateCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\DeleteCertificateCallbackRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\DownloadCertificateByEntitlementRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\DownloadCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetAcmeExternalAccountBindingRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCertificateCallbackRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCertificateEmailHistoryRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCertificatesByEntitlementRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCertificateSiteSealRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetCustomerCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\GetDomainVerificationDetailsRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ListCertificateActionsRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ListCustomerCertificatesRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ListDomainVerificationsRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ListSubscriptionCertificatesRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ReissueCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\RenewCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ReplaceCertificateCallbackRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ResendCertificateEmailRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ResendCertificateEmailToAddressRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\RevokeCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\SearchSubscriptionsByDomainRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\ValidateCertificateRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Request\VerifyCertificateDomainControlRequest;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Response\CertificatesResponse;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Response\ErrorLimitResponse;
+use CommunitySDKs\GoDaddy\Dto\Certificates\Response\ErrorResponse;
+use CommunitySDKs\GoDaddy\Exception\ApiException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesApiException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesBadRequestException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesConflictException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesForbiddenException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesNotFoundException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesRateLimitException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesServerException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesUnauthorizedException;
+use CommunitySDKs\GoDaddy\Exception\Certificates\CertificatesUnprocessableEntityException;
+
 final class CertificatesService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
@@ -12,143 +54,212 @@ final class CertificatesService extends AbstractService
         parent::__construct($client, self::BASE_URL);
     }
 
-    public function certificate_create(array $certificateCreate, ?string $xMarketId = null): mixed
+    public function create(CreateCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
+        return $this->execute('POST', '/v1/certificates', headers: $request->toHeaders(), body: $request->toBody());
     }
 
-    public function certificate_validate(array $certificateCreate, ?string $xMarketId = null): mixed
+    public function validate(ValidateCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/validate', headers: ['X-Market-Id' => $xMarketId], body: $certificateCreate);
+        return $this->execute('POST', '/v1/certificates/validate', headers: $request->toHeaders(), body: $request->toBody());
     }
 
-    public function certificate_get(string $certificateId): mixed
+    public function get(GetCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}', pathParams: compact('certificateId'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}', pathParams: $request->toPathParams());
     }
 
-    public function certificate_action_retrieve(string $certificateId): mixed
+    public function listActions(ListCertificateActionsRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}/actions', pathParams: compact('certificateId'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}/actions', pathParams: $request->toPathParams());
     }
 
-    public function certificate_resend_email(string $certificateId, string $emailId): mixed
+    public function resendEmail(ResendCertificateEmailRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend', pathParams: compact('certificateId', 'emailId'));
+        return $this->execute('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend', pathParams: $request->toPathParams());
     }
 
-    public function certificate_alternate_email_address(string $certificateId, string $emailAddress): mixed
+    public function addAlternateEmailAddress(AddAlternateEmailAddressRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/email/resend/{emailAddress}', pathParams: compact('certificateId', 'emailAddress'));
+        return $this->execute('POST', '/v1/certificates/{certificateId}/email/resend/{emailAddress}', pathParams: $request->toPathParams());
     }
 
-    public function certificate_resend_email_address(string $certificateId, string $emailId, string $emailAddress): mixed
+    public function resendEmailToAddress(ResendCertificateEmailToAddressRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend/{emailAddress}', pathParams: compact('certificateId', 'emailId', 'emailAddress'));
+        return $this->execute('POST', '/v1/certificates/{certificateId}/email/{emailId}/resend/{emailAddress}', pathParams: $request->toPathParams());
     }
 
-    public function certificate_email_history(string $certificateId): mixed
+    public function getEmailHistory(GetCertificateEmailHistoryRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}/email/history', pathParams: compact('certificateId'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}/email/history', pathParams: $request->toPathParams());
     }
 
-    public function certificate_callback_delete(string $certificateId): mixed
+    public function deleteCallback(DeleteCertificateCallbackRequest $request): CertificatesResponse
     {
-        return $this->call('DELETE', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
+        return $this->execute('DELETE', '/v1/certificates/{certificateId}/callback', pathParams: $request->toPathParams());
     }
 
-    public function certificate_callback_get(string $certificateId): mixed
+    public function getCallback(GetCertificateCallbackRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}/callback', pathParams: $request->toPathParams());
     }
 
-    public function certificate_callback_replace(string $certificateId, string $callbackUrl): mixed
+    public function replaceCallback(ReplaceCertificateCallbackRequest $request): CertificatesResponse
     {
-        return $this->call('PUT', '/v1/certificates/{certificateId}/callback', pathParams: compact('certificateId'), queryParams: compact('callbackUrl'));
+        return $this->execute('PUT', '/v1/certificates/{certificateId}/callback', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
     }
 
-    public function certificate_cancel(string $certificateId): mixed
+    public function cancel(CancelCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/cancel', pathParams: compact('certificateId'));
+        return $this->execute('POST', '/v1/certificates/{certificateId}/cancel', pathParams: $request->toPathParams());
     }
 
-    public function certificate_download(string $certificateId): mixed
+    public function download(DownloadCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}/download', pathParams: compact('certificateId'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}/download', pathParams: $request->toPathParams());
     }
 
-    public function certificate_reissue(string $certificateId, array $reissueCreate): mixed
+    public function reissue(ReissueCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/reissue', pathParams: compact('certificateId'), body: $reissueCreate);
+        return $this->execute('POST', '/v1/certificates/{certificateId}/reissue', pathParams: $request->toPathParams(), body: $request->toBody());
     }
 
-    public function certificate_renew(string $certificateId, array $renewCreate): mixed
+    public function renew(RenewCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/renew', pathParams: compact('certificateId'), body: $renewCreate);
+        return $this->execute('POST', '/v1/certificates/{certificateId}/renew', pathParams: $request->toPathParams(), body: $request->toBody());
     }
 
-    public function certificate_revoke(string $certificateId, array $certificateRevoke): mixed
+    public function revoke(RevokeCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/revoke', pathParams: compact('certificateId'), body: $certificateRevoke);
+        return $this->execute('POST', '/v1/certificates/{certificateId}/revoke', pathParams: $request->toPathParams(), body: $request->toBody());
     }
 
-    public function certificate_siteseal_get(string $certificateId, mixed $theme = null, mixed $locale = null): mixed
+    public function getSiteSeal(GetCertificateSiteSealRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v1/certificates/{certificateId}/siteSeal', pathParams: compact('certificateId'), queryParams: compact('theme', 'locale'));
+        return $this->execute('GET', '/v1/certificates/{certificateId}/siteSeal', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
     }
 
-    public function certificate_verifydomaincontrol(string $certificateId): mixed
+    public function verifyDomainControl(VerifyCertificateDomainControlRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v1/certificates/{certificateId}/verifyDomainControl', pathParams: compact('certificateId'));
+        return $this->execute('POST', '/v1/certificates/{certificateId}/verifyDomainControl', pathParams: $request->toPathParams());
     }
 
-    public function certificate_get_entitlement(string $entitlementId, ?bool $latest = null): mixed
+    public function getByEntitlement(GetCertificatesByEntitlementRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/certificates', queryParams: compact('entitlementId', 'latest'));
+        return $this->execute('GET', '/v2/certificates', queryParams: $request->toQueryParams());
     }
 
-    public function certificate_create_v2(array $subscriptionCertificateCreate, ?string $xMarketId = null): mixed
+    public function createForEntitlement(CreateCertificateForEntitlementRequest $request): CertificatesResponse
     {
-        return $this->call('POST', '/v2/certificates', headers: ['X-Market-Id' => $xMarketId], body: $subscriptionCertificateCreate);
+        return $this->execute('POST', '/v2/certificates', headers: $request->toHeaders(), body: $request->toBody());
     }
 
-    public function certificate_download_entitlement(string $entitlementId): mixed
+    public function downloadByEntitlement(DownloadCertificateByEntitlementRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/certificates/download', queryParams: compact('entitlementId'));
+        return $this->execute('GET', '/v2/certificates/download', queryParams: $request->toQueryParams());
     }
 
-    public function getCustomerCertificatesByCustomerId(string $customerId, ?int $offset = null, ?int $limit = null): mixed
+    public function listCustomerCertificates(ListCustomerCertificatesRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/certificates', pathParams: compact('customerId'), queryParams: compact('offset', 'limit'));
+        return $this->execute('GET', '/v2/customers/{customerId}/certificates', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
     }
 
-    public function getCertificateDetailByCertIdentifier(string $customerId, string $certificateId): mixed
+    public function getCustomerCertificate(GetCustomerCertificateRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}', pathParams: compact('customerId', 'certificateId'));
+        return $this->execute('GET', '/v2/customers/{customerId}/certificates/{certificateId}', pathParams: $request->toPathParams());
     }
 
-    public function getDomainInformationByCertificateId(string $customerId, string $certificateId): mixed
+    public function listDomainVerifications(ListDomainVerificationsRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications', pathParams: compact('customerId', 'certificateId'));
+        return $this->execute('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications', pathParams: $request->toPathParams());
     }
 
-    public function getDomainDetailsByDomain(string $customerId, string $certificateId, string $domain): mixed
+    public function getDomainVerificationDetails(GetDomainVerificationDetailsRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications/{domain}', pathParams: compact('customerId', 'certificateId', 'domain'));
+        return $this->execute('GET', '/v2/customers/{customerId}/certificates/{certificateId}/domainVerifications/{domain}', pathParams: $request->toPathParams());
     }
 
-    public function getAcmeExternalAccountBinding(string $customerId): mixed
+    public function getAcmeExternalAccountBinding(GetAcmeExternalAccountBindingRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/certificates/acme/externalAccountBinding', pathParams: compact('customerId'));
+        return $this->execute('GET', '/v2/customers/{customerId}/certificates/acme/externalAccountBinding', pathParams: $request->toPathParams());
     }
 
-    public function retrieveSslByDomainReseller(?int $pageSize = null, ?int $page = null, ?string $domain = null, ?string $status = null, ?string $type = null, ?string $validation = null): mixed
+    public function searchSubscriptionsByDomain(SearchSubscriptionsByDomainRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/certificates/subscriptions/search', queryParams: compact('pageSize', 'page', 'domain', 'status', 'type', 'validation'));
+        return $this->execute('GET', '/v2/certificates/subscriptions/search', queryParams: $request->toQueryParams());
     }
 
-    public function retrieveSslByDomainSubscriptionReseller(string $guid, ?int $pageSize = null, ?int $page = null, ?string $domain = null, ?string $status = null, ?string $type = null, ?string $validation = null): mixed
+    public function listSubscriptionCertificates(ListSubscriptionCertificatesRequest $request): CertificatesResponse
     {
-        return $this->call('GET', '/v2/certificates/subscription/{guid}', pathParams: compact('guid'), queryParams: compact('pageSize', 'page', 'domain', 'status', 'type', 'validation'));
+        return $this->execute('GET', '/v2/certificates/subscription/{guid}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
+    }
+
+    private function execute(
+        string $method,
+        string $path,
+        array $pathParams = [],
+        array $queryParams = [],
+        array $headers = [],
+        mixed $body = null
+    ): CertificatesResponse {
+        try {
+            $response = $this->call(
+                $method,
+                $path,
+                pathParams: $pathParams,
+                queryParams: $queryParams,
+                headers: $headers,
+                body: $body
+            );
+
+            return CertificatesResponse::fromMixed($response);
+        } catch (ApiException $exception) {
+            throw $this->mapException($exception);
+        }
+    }
+
+    private function mapException(ApiException $exception): CertificatesApiException
+    {
+        return match ($exception->getStatusCode()) {
+            400 => $this->rebuildException(CertificatesBadRequestException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            401 => $this->rebuildException(CertificatesUnauthorizedException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            403 => $this->rebuildException(CertificatesForbiddenException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            404 => $this->rebuildException(CertificatesNotFoundException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            409 => $this->rebuildException(CertificatesConflictException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            422 => $this->rebuildException(CertificatesUnprocessableEntityException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            429 => $this->rebuildException(CertificatesRateLimitException::class, $exception, ErrorLimitResponse::fromArray($this->decodeErrorBody($exception))),
+            default => $this->rebuildException(CertificatesServerException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+        };
+    }
+
+    private function decodeErrorBody(ApiException $exception): array
+    {
+        $body = $exception->getResponseBody();
+        if ($body === '') {
+            return [];
+        }
+
+        try {
+            $decoded = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            return is_array($decoded) ? $decoded : [];
+        } catch (\JsonException) {
+            return [];
+        }
+    }
+
+    /**
+     * @param class-string<CertificatesApiException> $class
+     */
+    private function rebuildException(string $class, ApiException $exception, object $errorResponse): CertificatesApiException
+    {
+        return new $class(
+            message: $exception->getMessage(),
+            statusCode: $exception->getStatusCode(),
+            responseBody: $exception->getResponseBody(),
+            headers: $exception->getHeaders(),
+            requestMethod: $exception->getRequestMethod(),
+            requestUrl: $exception->getRequestUrl(),
+            errorResponse: $errorResponse
+        );
     }
 }
