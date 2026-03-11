@@ -1,63 +1,40 @@
 # Countries Service
 
-This document covers the Countries service in the GoDaddy PHP SDK. It wraps the **GoDaddy API** endpoints from the provided Swagger file.
+This document covers the Countries service in the GoDaddy PHP SDK.
 
-Client accessor: ``$client->countries()``
+Client accessor: `$client->countries()`
 
-## getCountries
+All methods now use typed request DTOs and typed response DTOs.
 
-Retrieves summary country information for the provided marketId and filters
+## Methods
 
-- HTTP method: ``GET``
-- Path: ``/v1/countries``
-- Swagger operationId: ``getCountries``
+- `getCountries(GetCountriesRequest $request): CountriesListResponse`
+- `getCountry(GetCountryRequest $request): CountryListResponse`
 
-### Input
+## Example
 
 ```php
-$response = $client->countries()->getCountries(
-    marketId: 'sample',
-);
-```
+use CommunitySDKs\GoDaddy\Dto\Countries\Request\GetCountriesRequest;
 
-### Output
+$response = $client->countries()->getCountries(new GetCountriesRequest(
+    marketId: 'en-US'
+));
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/countries",
-  "summary": "Retrieves summary country information for the provided marketId and filters",
-  "data": {}
+foreach ($response->countries as $country) {
+    echo $country->countryKey . ' - ' . $country->label . PHP_EOL;
 }
 ```
 
-## getCountry
+## Exceptions
 
-Retrieves country and summary state information for provided countryKey
+Countries endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Countries\*`:
 
-- HTTP method: ``GET``
-- Path: ``/v1/countries/{countryKey}``
-- Swagger operationId: ``getCountry``
+- `CountriesBadRequestException`
+- `CountriesUnauthorizedException`
+- `CountriesForbiddenException`
+- `CountriesNotFoundException`
+- `CountriesUnprocessableEntityException`
+- `CountriesRateLimitException`
+- `CountriesServerException`
 
-### Input
-
-```php
-$response = $client->countries()->getCountry(
-    countryKey: 'sample',
-    marketId: 'sample',
-);
-```
-
-### Output
-
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/countries/{countryKey}",
-  "summary": "Retrieves country and summary state information for provided countryKey",
-  "data": {}
-}
-```
-
+Each exception extends `CountriesApiException` and exposes `getErrorResponse()`.
