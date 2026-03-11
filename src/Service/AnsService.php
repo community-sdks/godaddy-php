@@ -16,7 +16,12 @@ use CommunitySDKs\GoDaddy\Dto\Ans\Request\SubmitIdentityCsrRequest;
 use CommunitySDKs\GoDaddy\Dto\Ans\Request\SubmitServerCsrRequest;
 use CommunitySDKs\GoDaddy\Dto\Ans\Request\VerifyAcmeRequest;
 use CommunitySDKs\GoDaddy\Dto\Ans\Request\VerifyDnsRequest;
-use CommunitySDKs\GoDaddy\Dto\Ans\Response\AnsResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\AgentDetailsResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\AgentSearchResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\CertificateListResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\CsrStatusResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\CsrSubmissionResponse;
+use CommunitySDKs\GoDaddy\Dto\Ans\Response\EventPageResponse;
 use CommunitySDKs\GoDaddy\Dto\Ans\Response\ErrorResponse;
 use CommunitySDKs\GoDaddy\Exception\Ans\AnsApiException;
 use CommunitySDKs\GoDaddy\Exception\Ans\AnsBadRequestException;
@@ -31,76 +36,88 @@ use CommunitySDKs\GoDaddy\Exception\ApiException;
 
 final class AnsService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'ans');
+        parent::__construct($client, 'ans');
     }
 
-    public function search(SearchAgentsRequest $request): AnsResponse
+    public function search(SearchAgentsRequest $request): AgentSearchResponse
     {
-        return $this->execute('GET', '/v1/agents', queryParams: $request->toQueryParams());
+        $response = $this->execute('GET', '/v1/agents', queryParams: $request->toQueryParams());
+        return AgentSearchResponse::fromMixed($response);
     }
 
-    public function register(RegisterAgentRequest $request): AnsResponse
+    public function register(RegisterAgentRequest $request): AgentDetailsResponse
     {
-        return $this->execute('POST', '/v1/agents/register', body: $request->body);
+        $response = $this->execute('POST', '/v1/agents/register', body: $request->body);
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function resolve(ResolveAgentRequest $request): AnsResponse
+    public function resolve(ResolveAgentRequest $request): AgentDetailsResponse
     {
-        return $this->execute('POST', '/v1/agents/resolution', body: $request->body);
+        $response = $this->execute('POST', '/v1/agents/resolution', body: $request->body);
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function get(GetAgentRequest $request): AnsResponse
+    public function get(GetAgentRequest $request): AgentDetailsResponse
     {
-        return $this->execute('GET', '/v1/agents/{agentId}', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v1/agents/{agentId}', pathParams: $request->toPathParams());
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function revoke(RevokeAgentRequest $request): AnsResponse
+    public function revoke(RevokeAgentRequest $request): AgentDetailsResponse
     {
-        return $this->execute('POST', '/v1/agents/{agentId}/revoke', pathParams: $request->toPathParams(), body: $request->body);
+        $response = $this->execute('POST', '/v1/agents/{agentId}/revoke', pathParams: $request->toPathParams(), body: $request->body);
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function verifyAcme(VerifyAcmeRequest $request): AnsResponse
+    public function verifyAcme(VerifyAcmeRequest $request): AgentDetailsResponse
     {
-        return $this->execute('POST', '/v1/agents/{agentId}/verify-acme', pathParams: $request->toPathParams());
+        $response = $this->execute('POST', '/v1/agents/{agentId}/verify-acme', pathParams: $request->toPathParams());
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function verifyDns(VerifyDnsRequest $request): AnsResponse
+    public function verifyDns(VerifyDnsRequest $request): AgentDetailsResponse
     {
-        return $this->execute('POST', '/v1/agents/{agentId}/verify-dns', pathParams: $request->toPathParams());
+        $response = $this->execute('POST', '/v1/agents/{agentId}/verify-dns', pathParams: $request->toPathParams());
+        return AgentDetailsResponse::fromMixed($response);
     }
 
-    public function getIdentityCertificates(GetIdentityCertificatesRequest $request): AnsResponse
+    public function getIdentityCertificates(GetIdentityCertificatesRequest $request): CertificateListResponse
     {
-        return $this->execute('GET', '/v1/agents/{agentId}/certificates/identity', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v1/agents/{agentId}/certificates/identity', pathParams: $request->toPathParams());
+        return CertificateListResponse::fromMixed($response);
     }
 
-    public function submitIdentityCsr(SubmitIdentityCsrRequest $request): AnsResponse
+    public function submitIdentityCsr(SubmitIdentityCsrRequest $request): CsrSubmissionResponse
     {
-        return $this->execute('POST', '/v1/agents/{agentId}/certificates/identity', pathParams: $request->toPathParams(), body: $request->body);
+        $response = $this->execute('POST', '/v1/agents/{agentId}/certificates/identity', pathParams: $request->toPathParams(), body: $request->body);
+        return CsrSubmissionResponse::fromMixed($response);
     }
 
-    public function getServerCertificates(GetServerCertificatesRequest $request): AnsResponse
+    public function getServerCertificates(GetServerCertificatesRequest $request): CertificateListResponse
     {
-        return $this->execute('GET', '/v1/agents/{agentId}/certificates/server', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v1/agents/{agentId}/certificates/server', pathParams: $request->toPathParams());
+        return CertificateListResponse::fromMixed($response);
     }
 
-    public function submitServerCsr(SubmitServerCsrRequest $request): AnsResponse
+    public function submitServerCsr(SubmitServerCsrRequest $request): CsrSubmissionResponse
     {
-        return $this->execute('POST', '/v1/agents/{agentId}/certificates/server', pathParams: $request->toPathParams(), body: $request->body);
+        $response = $this->execute('POST', '/v1/agents/{agentId}/certificates/server', pathParams: $request->toPathParams(), body: $request->body);
+        return CsrSubmissionResponse::fromMixed($response);
     }
 
-    public function getCsrStatus(GetCsrStatusRequest $request): AnsResponse
+    public function getCsrStatus(GetCsrStatusRequest $request): CsrStatusResponse
     {
-        return $this->execute('GET', '/v1/agents/{agentId}/csrs/{csrId}/status', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v1/agents/{agentId}/csrs/{csrId}/status', pathParams: $request->toPathParams());
+        return CsrStatusResponse::fromMixed($response);
     }
 
-    public function events(GetAgentEventsRequest $request): AnsResponse
+    public function events(GetAgentEventsRequest $request): EventPageResponse
     {
-        return $this->execute('GET', '/v1/agents/events', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        $response = $this->execute('GET', '/v1/agents/events', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return EventPageResponse::fromMixed($response);
     }
 
     private function execute(
@@ -110,7 +127,7 @@ final class AnsService extends AbstractService
         array $queryParams = [],
         array $headers = [],
         mixed $body = null
-    ): AnsResponse {
+    ): mixed {
         try {
             $response = $this->call(
                 $method,
@@ -121,7 +138,7 @@ final class AnsService extends AbstractService
                 body: $body
             );
 
-            return AnsResponse::fromMixed($response);
+            return $response;
         } catch (ApiException $exception) {
             throw $this->mapException($exception);
         }
@@ -172,3 +189,4 @@ final class AnsService extends AbstractService
         }
     }
 }
+

@@ -29,7 +29,7 @@ final class AbuseServiceDtoTest extends TestCase
             offset: 0
         ));
 
-        self::assertSame('A1', $response->data['ticketIds'][0]);
+        self::assertSame('A1', $response->ticketIds[0]);
         self::assertSame('PHISHING', $transport->requests[0]->query['type']);
         self::assertSame(25, $transport->requests[0]->query['limit']);
     }
@@ -43,7 +43,7 @@ final class AbuseServiceDtoTest extends TestCase
 
         $response = $client->abuse()->getTicketInfo(new GetTicketInfoRequest('A1'));
 
-        self::assertSame('A1', $response->data['ticketId']);
+        self::assertSame('A1', $response->ticketId);
         self::assertStringContainsString('/v1/abuse/tickets/A1', $transport->requests[0]->url);
     }
 

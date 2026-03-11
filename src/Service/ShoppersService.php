@@ -29,11 +29,10 @@ use CommunitySDKs\GoDaddy\Exception\Shoppers\ShoppersUnprocessableEntityExceptio
 
 final class ShoppersService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'shoppers');
+        parent::__construct($client, 'shoppers');
     }
 
     public function createSubaccount(CreateSubaccountRequest $request): ShopperIdResponse
@@ -198,3 +197,4 @@ final class ShoppersService extends AbstractService
         );
     }
 }
+

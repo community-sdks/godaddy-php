@@ -9,7 +9,9 @@ use CommunitySDKs\GoDaddy\Dto\Abuse\Request\GetTicketInfoRequest;
 use CommunitySDKs\GoDaddy\Dto\Abuse\Request\GetTicketInfoV2Request;
 use CommunitySDKs\GoDaddy\Dto\Abuse\Request\GetTicketsRequest;
 use CommunitySDKs\GoDaddy\Dto\Abuse\Request\GetTicketsV2Request;
-use CommunitySDKs\GoDaddy\Dto\Abuse\Response\AbuseResponse;
+use CommunitySDKs\GoDaddy\Dto\Abuse\Response\AbuseTicketDetailsResponse;
+use CommunitySDKs\GoDaddy\Dto\Abuse\Response\AbuseTicketIdResponse;
+use CommunitySDKs\GoDaddy\Dto\Abuse\Response\AbuseTicketListResponse;
 use CommunitySDKs\GoDaddy\Dto\Abuse\Response\ErrorResponse;
 use CommunitySDKs\GoDaddy\Exception\Abuse\AbuseApiException;
 use CommunitySDKs\GoDaddy\Exception\Abuse\AbuseForbiddenException;
@@ -21,41 +23,46 @@ use CommunitySDKs\GoDaddy\Exception\ApiException;
 
 final class AbuseService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'abuse');
+        parent::__construct($client, 'abuse');
     }
 
-    public function getTickets(GetTicketsRequest $request): AbuseResponse
+    public function getTickets(GetTicketsRequest $request): AbuseTicketListResponse
     {
-        return $this->execute('GET', '/v1/abuse/tickets', queryParams: $request->toQueryParams());
+        $response = $this->execute('GET', '/v1/abuse/tickets', queryParams: $request->toQueryParams());
+        return AbuseTicketListResponse::fromMixed($response);
     }
 
-    public function createTicket(CreateTicketRequest $request): AbuseResponse
+    public function createTicket(CreateTicketRequest $request): AbuseTicketIdResponse
     {
-        return $this->execute('POST', '/v1/abuse/tickets', body: $request->body);
+        $response = $this->execute('POST', '/v1/abuse/tickets', body: $request->body);
+        return AbuseTicketIdResponse::fromMixed($response);
     }
 
-    public function getTicketInfo(GetTicketInfoRequest $request): AbuseResponse
+    public function getTicketInfo(GetTicketInfoRequest $request): AbuseTicketDetailsResponse
     {
-        return $this->execute('GET', '/v1/abuse/tickets/{ticketId}', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v1/abuse/tickets/{ticketId}', pathParams: $request->toPathParams());
+        return AbuseTicketDetailsResponse::fromMixed($response);
     }
 
-    public function getTicketsV2(GetTicketsV2Request $request): AbuseResponse
+    public function getTicketsV2(GetTicketsV2Request $request): AbuseTicketListResponse
     {
-        return $this->execute('GET', '/v2/abuse/tickets', queryParams: $request->toQueryParams());
+        $response = $this->execute('GET', '/v2/abuse/tickets', queryParams: $request->toQueryParams());
+        return AbuseTicketListResponse::fromMixed($response);
     }
 
-    public function createTicketV2(CreateTicketV2Request $request): AbuseResponse
+    public function createTicketV2(CreateTicketV2Request $request): AbuseTicketIdResponse
     {
-        return $this->execute('POST', '/v2/abuse/tickets', body: $request->body);
+        $response = $this->execute('POST', '/v2/abuse/tickets', body: $request->body);
+        return AbuseTicketIdResponse::fromMixed($response);
     }
 
-    public function getTicketInfoV2(GetTicketInfoV2Request $request): AbuseResponse
+    public function getTicketInfoV2(GetTicketInfoV2Request $request): AbuseTicketDetailsResponse
     {
-        return $this->execute('GET', '/v2/abuse/tickets/{ticketId}', pathParams: $request->toPathParams());
+        $response = $this->execute('GET', '/v2/abuse/tickets/{ticketId}', pathParams: $request->toPathParams());
+        return AbuseTicketDetailsResponse::fromMixed($response);
     }
 
     private function execute(
@@ -65,7 +72,7 @@ final class AbuseService extends AbstractService
         array $queryParams = [],
         array $headers = [],
         mixed $body = null
-    ): AbuseResponse {
+    ): mixed {
         try {
             $response = $this->call(
                 $method,
@@ -76,7 +83,7 @@ final class AbuseService extends AbstractService
                 body: $body
             );
 
-            return AbuseResponse::fromMixed($response);
+            return $response;
         } catch (ApiException $exception) {
             throw $this->mapException($exception);
         }
@@ -124,3 +131,4 @@ final class AbuseService extends AbstractService
         }
     }
 }
+

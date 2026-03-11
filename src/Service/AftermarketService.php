@@ -6,7 +6,8 @@ namespace CommunitySDKs\GoDaddy\Service;
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\AddExpiryListingsRequest;
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\DeleteListingsRequest;
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\GetListingsRequest;
-use CommunitySDKs\GoDaddy\Dto\Aftermarket\Response\AftermarketResponse;
+use CommunitySDKs\GoDaddy\Dto\Aftermarket\Response\ListingActionResponse;
+use CommunitySDKs\GoDaddy\Dto\Aftermarket\Response\ListingsResponse;
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Response\ErrorLimitResponse;
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Response\ErrorResponse;
 use CommunitySDKs\GoDaddy\Exception\Aftermarket\AftermarketApiException;
@@ -20,31 +21,34 @@ use CommunitySDKs\GoDaddy\Exception\ApiException;
 
 final class AftermarketService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'aftermarket');
+        parent::__construct($client, 'aftermarket');
     }
 
-    public function getListings(GetListingsRequest $request): AftermarketResponse
+    public function getListings(GetListingsRequest $request): ListingsResponse
     {
-        return $this->execute(
+        $response = $this->execute(
             'GET',
             '/v1/customers/{customerId}/auctions/listings',
             pathParams: $request->toPathParams(),
             queryParams: $request->toQueryParams()
         );
+
+        return ListingsResponse::fromMixed($response);
     }
 
-    public function deleteListings(DeleteListingsRequest $request): AftermarketResponse
+    public function deleteListings(DeleteListingsRequest $request): ListingActionResponse
     {
-        return $this->execute('DELETE', '/v1/aftermarket/listings', queryParams: $request->toQueryParams());
+        $response = $this->execute('DELETE', '/v1/aftermarket/listings', queryParams: $request->toQueryParams());
+        return ListingActionResponse::fromMixed($response);
     }
 
-    public function addExpiryListings(AddExpiryListingsRequest $request): AftermarketResponse
+    public function addExpiryListings(AddExpiryListingsRequest $request): ListingActionResponse
     {
-        return $this->execute('POST', '/v1/aftermarket/listings/expiry', body: $request->toBody());
+        $response = $this->execute('POST', '/v1/aftermarket/listings/expiry', body: $request->toBody());
+        return ListingActionResponse::fromMixed($response);
     }
 
     private function execute(
@@ -54,7 +58,7 @@ final class AftermarketService extends AbstractService
         array $queryParams = [],
         array $headers = [],
         mixed $body = null
-    ): AftermarketResponse {
+    ): mixed {
         try {
             $response = $this->call(
                 $method,
@@ -65,7 +69,7 @@ final class AftermarketService extends AbstractService
                 body: $body
             );
 
-            return AftermarketResponse::fromMixed($response);
+            return $response;
         } catch (ApiException $exception) {
             throw $this->mapException($exception);
         }
@@ -114,3 +118,4 @@ final class AftermarketService extends AbstractService
         );
     }
 }
+

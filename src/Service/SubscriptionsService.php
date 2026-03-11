@@ -27,11 +27,10 @@ use CommunitySDKs\GoDaddy\Exception\Subscriptions\SubscriptionsUnprocessableEnti
 
 final class SubscriptionsService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'subscriptions');
+        parent::__construct($client, 'subscriptions');
     }
 
     public function list(ListSubscriptionsRequest $request): SubscriptionListResponse
@@ -172,3 +171,4 @@ final class SubscriptionsService extends AbstractService
         );
     }
 }
+

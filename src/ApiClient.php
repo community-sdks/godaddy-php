@@ -48,7 +48,6 @@ final class ApiClient
 
     public function request(
         string $method,
-        string $serviceBaseUrl,
         ?string $serviceName,
         string $path,
         array $pathParams = [],
@@ -57,7 +56,7 @@ final class ApiClient
         mixed $body = null,
         bool $multipart = false
     ): mixed {
-        $baseUrl = $this->resolveBaseUrl($serviceBaseUrl, $serviceName);
+        $baseUrl = $this->resolveBaseUrl($serviceName);
 
         $request = new Request(
             method: $method,
@@ -78,7 +77,7 @@ final class ApiClient
         return $this->decodeResponse($response);
     }
 
-    private function resolveBaseUrl(string $serviceBaseUrl, ?string $serviceName): string
+    private function resolveBaseUrl(?string $serviceName): string
     {
         if ($serviceName !== null) {
             $serviceOverride = $this->config->serviceBaseUrls[$serviceName] ?? null;
@@ -91,7 +90,7 @@ final class ApiClient
             return $this->config->baseUrl;
         }
 
-        return $serviceBaseUrl;
+        throw new \RuntimeException('Base URL is not configured. Set Config::baseUrl or a service override in Config::serviceBaseUrls.');
     }
 
     private function buildHeaders(array $headers, mixed $body, bool $multipart): array

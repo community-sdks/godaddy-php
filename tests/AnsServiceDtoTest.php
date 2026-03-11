@@ -29,7 +29,7 @@ final class AnsServiceDtoTest extends TestCase
             offset: 0
         ));
 
-        self::assertSame(0, $response->data['totalCount']);
+        self::assertSame(0, $response->totalCount);
         self::assertSame('Sentiment', $transport->requests[0]->query['agentDisplayName']);
         self::assertSame('MCP', $transport->requests[0]->query['protocol']);
     }
@@ -46,7 +46,7 @@ final class AnsServiceDtoTest extends TestCase
             body: ['csrPEM' => '-----BEGIN CERTIFICATE REQUEST-----']
         ));
 
-        self::assertSame('550e8400-e29b-41d4-a716-446655440000', $response->data['csrId']);
+        self::assertSame('550e8400-e29b-41d4-a716-446655440000', $response->csrId);
         self::assertStringContainsString('/v1/agents/550e8400-e29b-41d4-a716-446655440000/certificates/identity', $transport->requests[0]->url);
         self::assertSame('-----BEGIN CERTIFICATE REQUEST-----', $transport->requests[0]->body['csrPEM']);
     }

@@ -31,7 +31,7 @@ final class AftermarketServiceDtoTest extends TestCase
             offset: 5
         ));
 
-        self::assertSame(0, $response->data['pagination']['total']);
+        self::assertSame(0, $response->pagination?->total);
         self::assertStringContainsString('/v1/customers/295e3bc3-b3b9-4d95-aae5-ede41a994d13/auctions/listings', $transport->requests[0]->url);
         self::assertSame(['example.com'], $transport->requests[0]->query['domains']);
     }
@@ -45,7 +45,7 @@ final class AftermarketServiceDtoTest extends TestCase
         $client = new Client(new Config(apiKey: 'key', apiSecret: 'secret', maxRetries: 0), $transport);
 
         $deleteResponse = $client->aftermarket()->deleteListings(new DeleteListingsRequest(['example.com']));
-        self::assertSame(123, $deleteResponse->data['listingActionId']);
+        self::assertSame(123, $deleteResponse->listingActionId);
         self::assertSame(['example.com'], $transport->requests[0]->query['domains']);
 
         $addResponse = $client->aftermarket()->addExpiryListings(new AddExpiryListingsRequest([
@@ -58,7 +58,7 @@ final class AftermarketServiceDtoTest extends TestCase
             )
         ]));
 
-        self::assertSame(456, $addResponse->data['listingActionId']);
+        self::assertSame(456, $addResponse->listingActionId);
         self::assertSame('example.com', $transport->requests[1]->body[0]['domain']);
     }
 

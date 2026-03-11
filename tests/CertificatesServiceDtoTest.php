@@ -27,7 +27,7 @@ final class CertificatesServiceDtoTest extends TestCase
             xMarketId: 'en-US'
         ));
 
-        self::assertSame('abc123', $response->data['certificateId']);
+        self::assertSame('abc123', $response->certificateId);
         self::assertSame('en-US', $transport->requests[0]->headers['X-Market-Id']);
     }
 
@@ -44,7 +44,7 @@ final class CertificatesServiceDtoTest extends TestCase
             locale: 'en-US'
         ));
 
-        self::assertSame('<div>seal</div>', $response->data['html']);
+        self::assertSame('<div>seal</div>', $response->html);
         self::assertSame('light', $transport->requests[0]->query['theme']);
         self::assertSame('en-US', $transport->requests[0]->query['locale']);
     }

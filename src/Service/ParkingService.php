@@ -20,11 +20,10 @@ use CommunitySDKs\GoDaddy\Exception\Parking\ParkingUnprocessableEntityException;
 
 final class ParkingService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'parking');
+        parent::__construct($client, 'parking');
     }
 
     public function getMetrics(GetParkingMetricsRequest $request): MetricListResponse
@@ -113,3 +112,4 @@ final class ParkingService extends AbstractService
         );
     }
 }
+

@@ -1,40 +1,43 @@
 # Agreements Service
 
-This document covers the Agreements service in the GoDaddy PHP SDK.
-
 Client accessor: `$client->agreements()`
 
-All methods now use typed request DTOs and typed response DTOs.
+## Method Index
+
+- [`get`](#get): `AgreementsListResponse`
 
 ## Methods
 
-- `get(GetAgreementsRequest $request): AgreementsListResponse`
+### get
 
-## Example
+Returns: `AgreementsListResponse`
+
+Request code:
 
 ```php
 use CommunitySDKs\GoDaddy\Dto\Agreements\Request\GetAgreementsRequest;
 
 $response = $client->agreements()->get(new GetAgreementsRequest(
-  keys: ['DNRA'],
-  xPrivateLabelId: 1,
-  xMarketId: 'en-US'
+    keys: []
 ));
+```
 
-foreach ($response->agreements as $agreement) {
-  echo $agreement->agreementKey . PHP_EOL;
+Response JSON example:
+
+```json
+{
+  "agreementKey": "DNRA",
+  "title": "Domain Name Registration Agreement",
+  "url": "https://www.godaddy.com/legal/agreements/domain-registration"
 }
 ```
 
 ## Exceptions
 
-Agreements endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Agreements\*`:
+Service-specific exceptions are under `CommunitySDKs\GoDaddy\Exception\Agreements\*` and expose `getErrorResponse()`.
 
-- `AgreementsBadRequestException`
-- `AgreementsUnauthorizedException`
-- `AgreementsForbiddenException`
-- `AgreementsRateLimitException`
-- `AgreementsServerException`
 
-Each exception extends `AgreementsApiException` and exposes `getErrorResponse()`.
+
+
+
 

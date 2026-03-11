@@ -1,43 +1,100 @@
 # Aftermarket Service
 
-This document covers the Aftermarket service in the GoDaddy PHP SDK.
-
 Client accessor: `$client->aftermarket()`
 
-All methods now use typed request DTOs and typed response DTOs.
+## Method Index
+
+- [`getListings`](#getlistings): `ListingsResponse`
+- [`deleteListings`](#deletelistings): `ListingActionResponse`
+- [`addExpiryListings`](#addexpirylistings): `ListingActionResponse`
 
 ## Methods
 
-- `getListings(GetListingsRequest $request): AftermarketResponse`
-- `deleteListings(DeleteListingsRequest $request): AftermarketResponse`
-- `addExpiryListings(AddExpiryListingsRequest $request): AftermarketResponse`
+### getListings
 
-## Example
+Returns: `ListingsResponse`
+
+Request code:
 
 ```php
 use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\GetListingsRequest;
 
 $response = $client->aftermarket()->getListings(new GetListingsRequest(
-    customerId: '295e3bc3-b3b9-4d95-aae5-ede41a994d13',
-    domains: ['example.com'],
-    listingStatus: 'FULFILLED',
-    limit: 20,
-    offset: 0
+    customerId: '123456789'
 ));
+```
 
-$data = $response->data;
+Response JSON example:
+
+```json
+{
+  "listings": [
+    {
+      "fqdn": "example.com",
+      "listingId": 1001,
+      "listingStatus": "ACTIVE",
+      "price": 2499,
+      "currency": "USD"
+    }
+  ],
+  "pagination": {
+    "total": 1,
+    "start": 0,
+    "limit": 20
+  }
+}
+```
+
+### deleteListings
+
+Returns: `ListingActionResponse`
+
+Request code:
+
+```php
+use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\DeleteListingsRequest;
+
+$response = $client->aftermarket()->deleteListings(new DeleteListingsRequest(
+    domains: ['example.com']
+));
+```
+
+Response JSON example:
+
+```json
+{
+  "listingActionId": 900122
+}
+```
+
+### addExpiryListings
+
+Returns: `ListingActionResponse`
+
+Request code:
+
+```php
+use CommunitySDKs\GoDaddy\Dto\Aftermarket\Request\AddExpiryListingsRequest;
+
+$response = $client->aftermarket()->addExpiryListings(new AddExpiryListingsRequest(
+    expiryListings: []
+));
+```
+
+Response JSON example:
+
+```json
+{
+  "listingActionId": 900122
+}
 ```
 
 ## Exceptions
 
-Aftermarket endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Aftermarket\*`:
+Service-specific exceptions are under `CommunitySDKs\GoDaddy\Exception\Aftermarket\*` and expose `getErrorResponse()`.
 
-- `AftermarketBadRequestException`
-- `AftermarketUnauthorizedException`
-- `AftermarketForbiddenException`
-- `AftermarketUnprocessableEntityException`
-- `AftermarketRateLimitException`
-- `AftermarketServerException`
 
-Each exception extends `AftermarketApiException` and exposes `getErrorResponse()`.
+
+
+
 

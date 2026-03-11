@@ -21,11 +21,10 @@ use CommunitySDKs\GoDaddy\Exception\Orders\OrdersUnauthorizedException;
 
 final class OrdersService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'orders');
+        parent::__construct($client, 'orders');
     }
 
     public function list(ListOrdersRequest $request): OrderListResponse
@@ -113,3 +112,4 @@ final class OrdersService extends AbstractService
         );
     }
 }
+

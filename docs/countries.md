@@ -1,17 +1,19 @@
 # Countries Service
 
-This document covers the Countries service in the GoDaddy PHP SDK.
-
 Client accessor: `$client->countries()`
 
-All methods now use typed request DTOs and typed response DTOs.
+## Method Index
+
+- [`getCountries`](#getcountries): `CountriesListResponse`
+- [`getCountry`](#getcountry): `CountryListResponse`
 
 ## Methods
 
-- `getCountries(GetCountriesRequest $request): CountriesListResponse`
-- `getCountry(GetCountryRequest $request): CountryListResponse`
+### getCountries
 
-## Example
+Returns: `CountriesListResponse`
+
+Request code:
 
 ```php
 use CommunitySDKs\GoDaddy\Dto\Countries\Request\GetCountriesRequest;
@@ -19,22 +21,54 @@ use CommunitySDKs\GoDaddy\Dto\Countries\Request\GetCountriesRequest;
 $response = $client->countries()->getCountries(new GetCountriesRequest(
     marketId: 'en-US'
 ));
+```
 
-foreach ($response->countries as $country) {
-    echo $country->countryKey . ' - ' . $country->label . PHP_EOL;
+Response JSON example:
+
+```json
+{
+  "countryKey": "US",
+  "label": "United States",
+  "callingCode": "1"
+}
+```
+
+### getCountry
+
+Returns: `CountryListResponse`
+
+Request code:
+
+```php
+use CommunitySDKs\GoDaddy\Dto\Countries\Request\GetCountryRequest;
+
+$response = $client->countries()->getCountry(new GetCountryRequest(
+    countryKey: 'example',
+    marketId: 'en-US'
+));
+```
+
+Response JSON example:
+
+```json
+{
+  "countryKey": "US",
+  "label": "United States",
+  "states": [
+    {
+      "stateKey": "AZ",
+      "label": "Arizona"
+    }
+  ]
 }
 ```
 
 ## Exceptions
 
-Countries endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Countries\*`:
+Service-specific exceptions are under `CommunitySDKs\GoDaddy\Exception\Countries\*` and expose `getErrorResponse()`.
 
-- `CountriesBadRequestException`
-- `CountriesUnauthorizedException`
-- `CountriesForbiddenException`
-- `CountriesNotFoundException`
-- `CountriesUnprocessableEntityException`
-- `CountriesRateLimitException`
-- `CountriesServerException`
 
-Each exception extends `CountriesApiException` and exposes `getErrorResponse()`.
+
+
+
+

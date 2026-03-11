@@ -9,7 +9,6 @@ abstract class AbstractService
 {
     public function __construct(
         protected readonly ApiClient $client,
-        protected readonly string $baseUrl,
         protected readonly string $serviceName
     ) {
     }
@@ -25,7 +24,6 @@ abstract class AbstractService
     ): mixed {
         return $this->client->request(
             method: $method,
-            serviceBaseUrl: $this->baseUrl,
             serviceName: $this->serviceName,
             path: $path,
             pathParams: $pathParams,

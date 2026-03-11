@@ -21,11 +21,10 @@ use CommunitySDKs\GoDaddy\Exception\Countries\CountriesUnprocessableEntityExcept
 
 final class CountriesService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'countries');
+        parent::__construct($client, 'countries');
     }
 
     public function getCountries(GetCountriesRequest $request): CountriesListResponse
@@ -106,3 +105,4 @@ final class CountriesService extends AbstractService
         );
     }
 }
+

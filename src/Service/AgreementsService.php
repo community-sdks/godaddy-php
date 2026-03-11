@@ -17,11 +17,10 @@ use CommunitySDKs\GoDaddy\Exception\ApiException;
 
 final class AgreementsService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'agreements');
+        parent::__construct($client, 'agreements');
     }
 
     public function get(GetAgreementsRequest $request): AgreementsListResponse
@@ -91,3 +90,4 @@ final class AgreementsService extends AbstractService
         );
     }
 }
+

@@ -11,7 +11,7 @@ final class Config
     public function __construct(
         public readonly ?string $apiKey = null,
         public readonly ?string $apiSecret = null,
-        public readonly ?string $baseUrl = null,
+        public readonly ?string $baseUrl = self::SANDBOX_BASE_URL,
         /** @var array<string, string> */
         public readonly array $serviceBaseUrls = [],
         public readonly float $timeout = 30.0,

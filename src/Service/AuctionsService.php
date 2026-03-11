@@ -17,11 +17,10 @@ use CommunitySDKs\GoDaddy\Exception\Auctions\AuctionsUnprocessableEntityExceptio
 
 final class AuctionsService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'auctions');
+        parent::__construct($client, 'auctions');
     }
 
     public function placeBids(PlaceBidsRequest $request): PlaceBidsResponse
@@ -92,3 +91,4 @@ final class AuctionsService extends AbstractService
         );
     }
 }
+

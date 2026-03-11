@@ -41,7 +41,7 @@ final class OrdersServiceDtoTest extends TestCase
 
         $response = $client->orders()->get(new GetOrderRequest('123', 'app-key', xMarketId: 'en-US'));
 
-        self::assertSame('123', $response->data['orderId']);
+        self::assertSame('123', $response->orderId);
         self::assertSame('en-US', $transport->requests[0]->headers['X-Market-Id']);
     }
 

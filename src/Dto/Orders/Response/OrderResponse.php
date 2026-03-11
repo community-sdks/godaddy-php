@@ -5,12 +5,37 @@ namespace CommunitySDKs\GoDaddy\Dto\Orders\Response;
 
 final readonly class OrderResponse
 {
-    public function __construct(public array $data)
-    {
+    /** @param list<LineItemSummaryResponse> $items */
+    public function __construct(
+        public string $orderId,
+        public string $currency,
+        public string $createdAt,
+        public OrderSummaryPricingResponse $pricing,
+        public array $items,
+        public ?string $status = null,
+        public ?string $parentOrderId = null
+    ) {
     }
 
     public static function fromArray(array $data): self
     {
-        return new self($data);
+        $items = [];
+        foreach (($data['items'] ?? []) as $item) {
+            if (is_array($item)) {
+                $items[] = LineItemSummaryResponse::fromArray($item);
+            }
+        }
+
+        return new self(
+            orderId: (string) ($data['orderId'] ?? ''),
+            currency: (string) ($data['currency'] ?? ''),
+            createdAt: (string) ($data['createdAt'] ?? ''),
+            pricing: isset($data['pricing']) && is_array($data['pricing'])
+                ? OrderSummaryPricingResponse::fromArray($data['pricing'])
+                : new OrderSummaryPricingResponse('0'),
+            items: $items,
+            status: isset($data['status']) ? (string) $data['status'] : null,
+            parentOrderId: isset($data['parentOrderId']) ? (string) $data['parentOrderId'] : null
+        );
     }
 }

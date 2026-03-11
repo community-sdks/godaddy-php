@@ -7,8 +7,8 @@ composer require community-sdks/godaddy-php
 ```
 
 ```php
-use CommunitySDKs\\GoDaddy\\Client;
-use CommunitySDKs\\GoDaddy\\Config;
+use CommunitySDKs\GoDaddy\Client;
+use CommunitySDKs\GoDaddy\Config;
 
 $client = new Client(new Config(
     apiKey: 'your-key',
@@ -18,7 +18,12 @@ $client = new Client(new Config(
 
 ## Environment Base URLs
 
-The SDK defaults to sandbox (OTE): `https://api.ote-godaddy.com`.
+Base URLs are configured only through `Config`.
+
+- Sandbox (OTE): `https://api.ote-godaddy.com`
+- Production: `https://api.godaddy.com`
+
+`new Config(...)` defaults to sandbox (OTE): `https://api.ote-godaddy.com`.
 
 Use production for all services:
 

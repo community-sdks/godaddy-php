@@ -37,7 +37,27 @@ use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsMaintenanceListRequest;
 use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsTldsRequest;
 use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsUsageRequest;
 use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainValidateRequest;
-use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainsResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainAvailabilityResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainActionCollectionResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainAgreementResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainBulkAvailabilityResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainCollectionResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainDetailsResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainForwardingResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainMaintenanceListResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainMaintenanceResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainNotificationAckResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainNotificationListResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainNotificationSchemaResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainOperationResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainOrderResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainRecordListResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainSchemaResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainSuggestionsResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainTransferResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainTldListResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainUsageResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainValidationResultResponse;
 use CommunitySDKs\GoDaddy\Dto\Domains\Response\ErrorLimitResponse;
 use CommunitySDKs\GoDaddy\Dto\Domains\Response\ErrorResponse;
 use CommunitySDKs\GoDaddy\Exception\ApiException;
@@ -53,336 +73,463 @@ use CommunitySDKs\GoDaddy\Exception\Domains\DomainsUnprocessableEntityException;
 
 final class DomainsService extends AbstractService
 {
-    public const BASE_URL = 'https://api.ote-godaddy.com';
 
     public function __construct(\CommunitySDKs\GoDaddy\ApiClient $client)
     {
-        parent::__construct($client, self::BASE_URL, 'domains');
+        parent::__construct($client, 'domains');
     }
 
-    public function list(DomainsListRequest $request): DomainsResponse
+    public function list(DomainsListRequest $request): DomainCollectionResponse
     {
-        return $this->execute('GET', '/v1/domains', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainCollectionResponse::fromMixed(
+            $this->execute('GET', '/v1/domains', queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getAgreement(DomainsAgreementRequest $request): DomainsResponse
+    public function getAgreement(DomainsAgreementRequest $request): DomainAgreementResponse
     {
-        return $this->execute('GET', '/v1/domains/agreements', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainAgreementResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/agreements', queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function available(DomainAvailabilityRequest $request): DomainsResponse
+    public function available(DomainAvailabilityRequest $request): DomainAvailabilityResponse
     {
-        return $this->execute('GET', '/v1/domains/available', queryParams: $request->toQueryParams());
+        return DomainAvailabilityResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/available', queryParams: $request->toQueryParams())
+        );
     }
 
-    public function availableBulk(DomainAvailabilityBulkRequest $request): DomainsResponse
+    public function availableBulk(DomainAvailabilityBulkRequest $request): DomainBulkAvailabilityResponse
     {
-        return $this->execute('POST', '/v1/domains/available', queryParams: $request->toQueryParams(), body: $request->toBody());
+        return DomainBulkAvailabilityResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/available', queryParams: $request->toQueryParams(), body: $request->toBody())
+        );
     }
 
-    public function contactsValidate(DomainContactsValidateRequest $request): DomainsResponse
+    public function contactsValidate(DomainContactsValidateRequest $request): DomainValidationResultResponse
     {
-        return $this->execute('POST', '/v1/domains/contacts/validate', queryParams: $request->toQueryParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainValidationResultResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/contacts/validate', queryParams: $request->toQueryParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function purchase(DomainPurchaseRequest $request): DomainsResponse
+    public function purchase(DomainPurchaseRequest $request): DomainOrderResponse
     {
-        return $this->execute('POST', '/v1/domains/purchase', headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/purchase', headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function schema(DomainSchemaRequest $request): DomainsResponse
+    public function schema(DomainSchemaRequest $request): DomainSchemaResponse
     {
-        return $this->execute('GET', '/v1/domains/purchase/schema/{tld}', pathParams: $request->toPathParams());
+        return DomainSchemaResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/purchase/schema/{tld}', pathParams: $request->toPathParams())
+        );
     }
 
-    public function validate(DomainValidateRequest $request): DomainsResponse
+    public function validate(DomainValidateRequest $request): DomainValidationResultResponse
     {
-        return $this->execute('POST', '/v1/domains/purchase/validate', body: $request->body);
+        return DomainValidationResultResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/purchase/validate', body: $request->body)
+        );
     }
 
-    public function suggest(DomainSuggestRequest $request): DomainsResponse
+    public function suggest(DomainSuggestRequest $request): DomainSuggestionsResponse
     {
-        return $this->execute('GET', '/v1/domains/suggest', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainSuggestionsResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/suggest', queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function tlds(DomainsTldsRequest $request): DomainsResponse
+    public function tlds(DomainsTldsRequest $request): DomainTldListResponse
     {
-        return $this->execute('GET', '/v1/domains/tlds');
+        return DomainTldListResponse::fromMixed($this->execute('GET', '/v1/domains/tlds'));
     }
 
-    public function cancel(DomainPathRequest $request): DomainsResponse
+    public function cancel(DomainPathRequest $request): DomainOperationResponse
     {
-        return $this->execute('DELETE', '/v1/domains/{domain}', pathParams: ['domain' => $request->domain]);
+        return DomainOperationResponse::fromMixed(
+            $this->execute('DELETE', '/v1/domains/{domain}', pathParams: ['domain' => $request->domain])
+        );
     }
 
-    public function get(DomainPathRequest $request): DomainsResponse
+    public function get(DomainPathRequest $request): DomainDetailsResponse
     {
-        return $this->execute('GET', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function update(DomainBodyRequest $request): DomainsResponse
+    public function update(DomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('PATCH', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('PATCH', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function updateContacts(DomainBodyRequest $request): DomainsResponse
+    public function updateContacts(DomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('PATCH', '/v1/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('PATCH', '/v1/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function cancelPrivacy(DomainPathRequest $request): DomainsResponse
+    public function cancelPrivacy(DomainPathRequest $request): DomainOperationResponse
     {
-        return $this->execute('DELETE', '/v1/domains/{domain}/privacy', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainOperationResponse::fromMixed(
+            $this->execute('DELETE', '/v1/domains/{domain}/privacy', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function purchasePrivacy(DomainBodyRequest $request): DomainsResponse
+    public function purchasePrivacy(DomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('POST', '/v1/domains/{domain}/privacy/purchase', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/{domain}/privacy/purchase', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function recordAdd(DomainBodyRequest $request): DomainsResponse
+    public function recordAdd(DomainBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('PATCH', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('PATCH', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function recordReplace(DomainBodyRequest $request): DomainsResponse
+    public function recordReplace(DomainBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('PUT', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('PUT', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function recordGet(DomainTypeNameLookupRequest $request): DomainsResponse
+    public function recordGet(DomainTypeNameLookupRequest $request): DomainRecordListResponse
     {
-        return $this->execute('GET', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('GET', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function recordReplaceTypeName(DomainTypeNameBodyRequest $request): DomainsResponse
+    public function recordReplaceTypeName(DomainTypeNameBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('PUT', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('PUT', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function recordDeleteTypeName(DomainTypeNameLookupRequest $request): DomainsResponse
+    public function recordDeleteTypeName(DomainTypeNameLookupRequest $request): DomainRecordListResponse
     {
-        return $this->execute('DELETE', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('DELETE', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function recordReplaceType(DomainTypeBodyRequest $request): DomainsResponse
+    public function recordReplaceType(DomainTypeBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('PUT', '/v1/domains/{domain}/records/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('PUT', '/v1/domains/{domain}/records/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function renew(DomainRenewRequest $request): DomainsResponse
+    public function renew(DomainRenewRequest $request): DomainOrderResponse
     {
-        return $this->execute('POST', '/v1/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function transferIn(DomainBodyRequest $request): DomainsResponse
+    public function transferIn(DomainBodyRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v1/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function verifyEmail(DomainPathRequest $request): DomainsResponse
+    public function verifyEmail(DomainPathRequest $request): DomainDetailsResponse
     {
-        return $this->execute('POST', '/v1/domains/{domain}/verifyRegistrantEmail', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('POST', '/v1/domains/{domain}/verifyRegistrantEmail', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomain(CustomerDomainIncludesRequest $request): DomainsResponse
+    public function getCustomerDomain(CustomerDomainIncludesRequest $request): DomainDetailsResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function cancelCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainsResponse
+    public function cancelCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainOperationResponse
     {
-        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainOperationResponse::fromMixed(
+            $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainsResponse
+    public function getCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainDetailsResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function addCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainsResponse
+    public function addCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function removeCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainsResponse
+    public function removeCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainRecordListResponse
     {
-        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainRecordListResponse::fromMixed(
+            $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function replaceCustomerDomainNameServers(CustomerDomainBodyRequest $request): DomainsResponse
+    public function replaceCustomerDomainNameServers(CustomerDomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('PUT', '/v2/customers/{customerId}/domains/{domain}/nameServers', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('PUT', '/v2/customers/{customerId}/domains/{domain}/nameServers', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function getCustomerDomainPrivacyForwarding(CustomerDomainRequest $request): DomainsResponse
+    public function getCustomerDomainPrivacyForwarding(CustomerDomainRequest $request): DomainForwardingResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function updateCustomerDomainPrivacyForwarding(CustomerDomainBodyRequest $request): DomainsResponse
+    public function updateCustomerDomainPrivacyForwarding(CustomerDomainBodyRequest $request): DomainForwardingResponse
     {
-        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function redeemCustomerDomain(CustomerDomainOptionalBodyRequest $request): DomainsResponse
+    public function redeemCustomerDomain(CustomerDomainOptionalBodyRequest $request): DomainDetailsResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/redeem', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/redeem', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function renewCustomerDomain(CustomerDomainBodyRequest $request): DomainsResponse
+    public function renewCustomerDomain(CustomerDomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function transferCustomerDomain(CustomerDomainBodyRequest $request): DomainsResponse
+    public function transferCustomerDomain(CustomerDomainBodyRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function getCustomerDomainTransferStatus(CustomerDomainRequest $request): DomainsResponse
+    public function getCustomerDomainTransferStatus(CustomerDomainRequest $request): DomainTransferResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function validateCustomerDomainTransfer(CustomerDomainBodyRequest $request): DomainsResponse
+    public function validateCustomerDomainTransfer(CustomerDomainBodyRequest $request): DomainValidationResultResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainValidationResultResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function acceptCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainsResponse
+    public function acceptCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function cancelCustomerDomainTransferIn(CustomerDomainRequest $request): DomainsResponse
+    public function cancelCustomerDomainTransferIn(CustomerDomainRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInCancel', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInCancel', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function restartCustomerDomainTransferIn(CustomerDomainRequest $request): DomainsResponse
+    public function restartCustomerDomainTransferIn(CustomerDomainRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRestart', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRestart', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function retryCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainsResponse
+    public function retryCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRetry', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRetry', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function initiateCustomerDomainTransferOut(CustomerDomainRegistrarRequest $request): DomainsResponse
+    public function initiateCustomerDomainTransferOut(CustomerDomainRegistrarRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOut', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOut', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function acceptCustomerDomainTransferOut(CustomerDomainRequest $request): DomainsResponse
+    public function acceptCustomerDomainTransferOut(CustomerDomainRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function rejectCustomerDomainTransferOut(CustomerDomainReasonRequest $request): DomainsResponse
+    public function rejectCustomerDomainTransferOut(CustomerDomainReasonRequest $request): DomainTransferResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutReject', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainTransferResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutReject', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function deleteDomainForwarding(DomainForwardingRequest $request): DomainsResponse
+    public function deleteDomainForwarding(DomainForwardingRequest $request): DomainForwardingResponse
     {
-        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams());
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('DELETE', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams())
+        );
     }
 
-    public function getDomainForwarding(DomainForwardingRequest $request): DomainsResponse
+    public function getDomainForwarding(DomainForwardingRequest $request): DomainForwardingResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams())
+        );
     }
 
-    public function updateDomainForwarding(DomainForwardingRequest $request): DomainsResponse
+    public function updateDomainForwarding(DomainForwardingRequest $request): DomainForwardingResponse
     {
-        return $this->execute('PUT', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body);
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('PUT', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body)
+        );
     }
 
-    public function createDomainForwarding(DomainForwardingRequest $request): DomainsResponse
+    public function createDomainForwarding(DomainForwardingRequest $request): DomainForwardingResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body);
+        return DomainForwardingResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body)
+        );
     }
 
-    public function listCustomerDomainActions(CustomerDomainRequest $request): DomainsResponse
+    public function listCustomerDomainActions(CustomerDomainRequest $request): DomainActionCollectionResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainActionCollectionResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function cancelCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainsResponse
+    public function cancelCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainOperationResponse
     {
-        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainOperationResponse::fromMixed(
+            $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainsResponse
+    public function getCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainDetailsResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomainNotifications(CustomerIdRequest $request): DomainsResponse
+    public function getCustomerDomainNotifications(CustomerIdRequest $request): DomainNotificationListResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainNotificationListResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/notifications', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomainNotificationOptIns(CustomerIdRequest $request): DomainsResponse
+    public function getCustomerDomainNotificationOptIns(CustomerIdRequest $request): DomainNotificationListResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainNotificationListResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function updateCustomerDomainNotificationOptIns(CustomerNotificationOptInUpdateRequest $request): DomainsResponse
+    public function updateCustomerDomainNotificationOptIns(CustomerNotificationOptInUpdateRequest $request): DomainNotificationListResponse
     {
-        return $this->execute('PUT', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainNotificationListResponse::fromMixed(
+            $this->execute('PUT', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getCustomerDomainNotificationSchema(CustomerNotificationSchemaRequest $request): DomainsResponse
+    public function getCustomerDomainNotificationSchema(CustomerNotificationSchemaRequest $request): DomainNotificationSchemaResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/schemas/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainNotificationSchemaResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/schemas/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function acknowledgeCustomerDomainNotification(CustomerNotificationAckRequest $request): DomainsResponse
+    public function acknowledgeCustomerDomainNotification(CustomerNotificationAckRequest $request): DomainNotificationAckResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/notifications/{notificationId}/acknowledge', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainNotificationAckResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/notifications/{notificationId}/acknowledge', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function registerCustomerDomain(CustomerRegisterRequest $request): DomainsResponse
+    public function registerCustomerDomain(CustomerRegisterRequest $request): DomainOrderResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/register', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/register', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function getCustomerDomainRegisterSchema(CustomerRegisterSchemaRequest $request): DomainsResponse
+    public function getCustomerDomainRegisterSchema(CustomerRegisterSchemaRequest $request): DomainSchemaResponse
     {
-        return $this->execute('GET', '/v2/customers/{customerId}/domains/register/schema/{tld}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainSchemaResponse::fromMixed(
+            $this->execute('GET', '/v2/customers/{customerId}/domains/register/schema/{tld}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function validateCustomerDomainRegister(CustomerRegisterValidateRequest $request): DomainsResponse
+    public function validateCustomerDomainRegister(CustomerRegisterValidateRequest $request): DomainValidationResultResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/register/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainValidationResultResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/register/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function listDomainMaintenances(DomainsMaintenanceListRequest $request): DomainsResponse
+    public function listDomainMaintenances(DomainsMaintenanceListRequest $request): DomainMaintenanceListResponse
     {
-        return $this->execute('GET', '/v2/domains/maintenances', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainMaintenanceListResponse::fromMixed(
+            $this->execute('GET', '/v2/domains/maintenances', queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getDomainMaintenance(DomainMaintenanceRequest $request): DomainsResponse
+    public function getDomainMaintenance(DomainMaintenanceRequest $request): DomainMaintenanceResponse
     {
-        return $this->execute('GET', '/v2/domains/maintenances/{maintenanceId}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainMaintenanceResponse::fromMixed(
+            $this->execute('GET', '/v2/domains/maintenances/{maintenanceId}', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function getDomainUsage(DomainsUsageRequest $request): DomainsResponse
+    public function getDomainUsage(DomainsUsageRequest $request): DomainUsageResponse
     {
-        return $this->execute('GET', '/v2/domains/usage/{yyyymm}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
+        return DomainUsageResponse::fromMixed(
+            $this->execute('GET', '/v2/domains/usage/{yyyymm}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders())
+        );
     }
 
-    public function updateCustomerDomainContacts(CustomerDomainBodyRequest $request): DomainsResponse
+    public function updateCustomerDomainContacts(CustomerDomainBodyRequest $request): DomainOrderResponse
     {
-        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
+        return DomainOrderResponse::fromMixed(
+            $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body)
+        );
     }
 
-    public function regenerateCustomerDomainAuthCode(CustomerDomainRequest $request): DomainsResponse
+    public function regenerateCustomerDomainAuthCode(CustomerDomainRequest $request): DomainDetailsResponse
     {
-        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/regenerateAuthCode', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+        return DomainDetailsResponse::fromMixed(
+            $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/regenerateAuthCode', pathParams: $request->toPathParams(), headers: $request->toHeaders())
+        );
     }
 
     private function execute(
@@ -392,10 +539,9 @@ final class DomainsService extends AbstractService
         array $queryParams = [],
         array $headers = [],
         mixed $body = null
-    ): DomainsResponse {
+    ): mixed {
         try {
-            $response = $this->call($method, $path, $pathParams, $queryParams, $headers, $body);
-            return DomainsResponse::fromMixed($response);
+            return $this->call($method, $path, $pathParams, $queryParams, $headers, $body);
         } catch (ApiException $exception) {
             throw $this->mapException($exception);
         }
@@ -446,3 +592,6 @@ final class DomainsService extends AbstractService
         );
     }
 }
+
+
+

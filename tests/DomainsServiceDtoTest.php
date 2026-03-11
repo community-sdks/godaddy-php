@@ -23,7 +23,7 @@ final class DomainsServiceDtoTest extends TestCase
 
         $response = $client->domains()->list(new DomainsListRequest(xShopperId: '123', limit: 1));
 
-        self::assertIsArray($response->data);
+        self::assertIsArray($response->items);
         self::assertSame('123', $transport->requests[0]->headers['X-Shopper-Id']);
         self::assertSame(['limit' => 1], $transport->requests[0]->query);
     }
@@ -37,7 +37,7 @@ final class DomainsServiceDtoTest extends TestCase
 
         $response = $client->domains()->getCustomerDomain(new CustomerDomainIncludesRequest('cust-1', 'example.com', includes: ['contacts']));
 
-        self::assertIsArray($response->data);
+        self::assertSame('example.com', $response->domain);
         self::assertStringContainsString('/v2/customers/cust-1/domains/example.com', $transport->requests[0]->url);
     }
 

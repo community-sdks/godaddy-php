@@ -1,42 +1,88 @@
 # Orders Service
 
-This document covers the Orders service in the GoDaddy PHP SDK.
-
 Client accessor: `$client->orders()`
 
-All methods now use typed request DTOs and typed response DTOs.
+## Method Index
+
+- [`list`](#list): `OrderListResponse`
+- [`get`](#get): `OrderResponse`
 
 ## Methods
 
-- `list(ListOrdersRequest $request): OrderListResponse`
-- `get(GetOrderRequest $request): OrderResponse`
+### list
 
-## Example
+Returns: `OrderListResponse`
+
+Request code:
 
 ```php
 use CommunitySDKs\GoDaddy\Dto\Orders\Request\ListOrdersRequest;
 
 $response = $client->orders()->list(new ListOrdersRequest(
-    xAppKey: 'app-key',
-    limit: 25,
-    sort: '-createdAt',
+    xAppKey: 'app_abc123'
 ));
+```
 
-foreach ($response->orders as $order) {
-    echo $order->orderId . PHP_EOL;
+Response JSON example:
+
+```json
+{
+  "orders": [
+    {
+      "orderId": "1234567890",
+      "currency": "USD",
+      "createdAt": "2026-03-11T12:00:00Z"
+    }
+  ],
+  "pagination": {
+    "total": 1,
+    "next": null
+  }
+}
+```
+
+### get
+
+Returns: `OrderResponse`
+
+Request code:
+
+```php
+use CommunitySDKs\GoDaddy\Dto\Orders\Request\GetOrderRequest;
+
+$response = $client->orders()->get(new GetOrderRequest(
+    orderId: '1234567890',
+    xAppKey: 'app_abc123'
+));
+```
+
+Response JSON example:
+
+```json
+{
+  "orderId": "1234567890",
+  "currency": "USD",
+  "createdAt": "2026-03-11T12:00:00Z",
+  "status": "PENDING",
+  "pricing": {
+    "total": "14.99"
+  },
+  "items": [
+    {
+      "itemId": "line-1",
+      "label": "example.com",
+      "status": "PENDING"
+    }
+  ]
 }
 ```
 
 ## Exceptions
 
-Orders endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Orders\*`:
+Service-specific exceptions are under `CommunitySDKs\GoDaddy\Exception\Orders\*` and expose `getErrorResponse()`.
 
-- `OrdersBadRequestException`
-- `OrdersUnauthorizedException`
-- `OrdersForbiddenException`
-- `OrdersNotFoundException`
-- `OrdersRateLimitException`
-- `OrdersServerException`
-- `OrdersGatewayTimeoutException`
 
-Each exception extends `OrdersApiException` and exposes `getErrorResponse()`.
+
+
+
+
