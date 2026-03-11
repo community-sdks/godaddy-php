@@ -3,6 +3,54 @@ declare(strict_types=1);
 
 namespace CommunitySDKs\GoDaddy\Service;
 
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainActionTypeRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainBodyRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainIncludesRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainOptionalBodyRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainReasonRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainRegistrarRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerDomainRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerIdRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerNotificationAckRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerNotificationOptInUpdateRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerNotificationSchemaRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerRegisterRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerRegisterSchemaRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\CustomerRegisterValidateRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainAvailabilityBulkRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainAvailabilityRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainBodyRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainContactsValidateRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainForwardingRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainMaintenanceRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainPathRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainPurchaseRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainRenewRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainSchemaRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainSuggestRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainTypeBodyRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainTypeNameBodyRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainTypeNameLookupRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsAgreementRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsListRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsMaintenanceListRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsTldsRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainsUsageRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Request\DomainValidateRequest;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\DomainsResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\ErrorLimitResponse;
+use CommunitySDKs\GoDaddy\Dto\Domains\Response\ErrorResponse;
+use CommunitySDKs\GoDaddy\Exception\ApiException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsApiException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsBadRequestException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsConflictException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsForbiddenException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsNotFoundException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsRateLimitException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsServerException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsUnauthorizedException;
+use CommunitySDKs\GoDaddy\Exception\Domains\DomainsUnprocessableEntityException;
+
 final class DomainsService extends AbstractService
 {
     public const BASE_URL = 'https://api.ote-godaddy.com';
@@ -12,328 +60,389 @@ final class DomainsService extends AbstractService
         parent::__construct($client, self::BASE_URL);
     }
 
-    public function list(?string $xShopperId = null, ?array $statuses = null, ?array $statusGroups = null, ?int $limit = null, ?string $marker = null, ?array $includes = null, ?string $modifiedDate = null): mixed
+    public function list(DomainsListRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains', queryParams: compact('statuses', 'statusGroups', 'limit', 'marker', 'includes', 'modifiedDate'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('GET', '/v1/domains', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function getAgreement(array $tlds, bool $privacy, ?string $xMarketId = null, ?bool $forTransfer = null): mixed
+    public function getAgreement(DomainsAgreementRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/agreements', queryParams: compact('tlds', 'privacy', 'forTransfer'), headers: ['X-Market-Id' => $xMarketId]);
+        return $this->execute('GET', '/v1/domains/agreements', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function available(string $domain, ?string $checkType = null, ?bool $forTransfer = null): mixed
+    public function available(DomainAvailabilityRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/available', queryParams: compact('domain', 'checkType', 'forTransfer'));
+        return $this->execute('GET', '/v1/domains/available', queryParams: $request->toQueryParams());
     }
 
-    public function availableBulk(array $domains, ?string $checkType = null): mixed
+    public function availableBulk(DomainAvailabilityBulkRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/available', queryParams: compact('checkType'), body: $domains);
+        return $this->execute('POST', '/v1/domains/available', queryParams: $request->toQueryParams(), body: $request->toBody());
     }
 
-    public function ContactsValidate(array $body, ?string $xPrivateLabelId = null, ?string $marketId = null): mixed
+    public function contactsValidate(DomainContactsValidateRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/contacts/validate', queryParams: compact('marketId'), headers: ['X-Private-Label-Id' => $xPrivateLabelId], body: $body);
+        return $this->execute('POST', '/v1/domains/contacts/validate', queryParams: $request->toQueryParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function purchase(array $body, ?string $xShopperId = null): mixed
+    public function purchase(DomainPurchaseRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/purchase', headers: ['X-Shopper-Id' => $xShopperId], body: $body);
+        return $this->execute('POST', '/v1/domains/purchase', headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function schema(string $tld): mixed
+    public function schema(DomainSchemaRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/purchase/schema/{tld}', pathParams: compact('tld'));
+        return $this->execute('GET', '/v1/domains/purchase/schema/{tld}', pathParams: $request->toPathParams());
     }
 
-    public function validate(array $body): mixed
+    public function validate(DomainValidateRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/purchase/validate', body: $body);
+        return $this->execute('POST', '/v1/domains/purchase/validate', body: $request->body);
     }
 
-    public function suggest(?string $xShopperId = null, ?string $query = null, ?string $country = null, ?string $city = null, ?array $sources = null, ?array $tlds = null, ?int $lengthMax = null, ?int $lengthMin = null, ?int $limit = null, ?int $waitMs = null): mixed
+    public function suggest(DomainSuggestRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/suggest', queryParams: compact('query', 'country', 'city', 'sources', 'tlds', 'lengthMax', 'lengthMin', 'limit', 'waitMs'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('GET', '/v1/domains/suggest', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function tlds(): mixed
+    public function tlds(DomainsTldsRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/tlds');
+        return $this->execute('GET', '/v1/domains/tlds');
     }
 
-    public function cancel(string $domain): mixed
+    public function cancel(DomainPathRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v1/domains/{domain}', pathParams: compact('domain'));
+        return $this->execute('DELETE', '/v1/domains/{domain}', pathParams: ['domain' => $request->domain]);
     }
 
-    public function get(string $domain, ?string $xShopperId = null): mixed
+    public function get(DomainPathRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/{domain}', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('GET', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function update(string $domain, array $body, ?string $xShopperId = null): mixed
+    public function update(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v1/domains/{domain}', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $body);
+        return $this->execute('PATCH', '/v1/domains/{domain}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function updateContacts(string $domain, array $contacts, ?string $xShopperId = null): mixed
+    public function updateContacts(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v1/domains/{domain}/contacts', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $contacts);
+        return $this->execute('PATCH', '/v1/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function cancelPrivacy(string $domain, ?string $xShopperId = null): mixed
+    public function cancelPrivacy(DomainPathRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v1/domains/{domain}/privacy', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('DELETE', '/v1/domains/{domain}/privacy', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function purchasePrivacy(string $domain, array $body, ?string $xShopperId = null): mixed
+    public function purchasePrivacy(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/{domain}/privacy/purchase', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $body);
+        return $this->execute('POST', '/v1/domains/{domain}/privacy/purchase', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function recordAdd(string $domain, array $records, ?string $xShopperId = null): mixed
+    public function recordAdd(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v1/domains/{domain}/records', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $records);
+        return $this->execute('PATCH', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function recordReplace(string $domain, array $records, ?string $xShopperId = null): mixed
+    public function recordReplace(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v1/domains/{domain}/records', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $records);
+        return $this->execute('PUT', '/v1/domains/{domain}/records', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function recordGet(string $domain, string $type, string $name, ?string $xShopperId = null, ?int $offset = null, ?int $limit = null): mixed
+    public function recordGet(DomainTypeNameLookupRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v1/domains/{domain}/records/{type}/{name}', pathParams: compact('domain', 'type', 'name'), queryParams: compact('offset', 'limit'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('GET', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function recordReplaceTypeName(string $domain, string $type, string $name, array $records, ?string $xShopperId = null): mixed
+    public function recordReplaceTypeName(DomainTypeNameBodyRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v1/domains/{domain}/records/{type}/{name}', pathParams: compact('domain', 'type', 'name'), headers: ['X-Shopper-Id' => $xShopperId], body: $records);
+        return $this->execute('PUT', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function recordDeleteTypeName(string $domain, string $type, string $name, ?string $xShopperId = null): mixed
+    public function recordDeleteTypeName(DomainTypeNameLookupRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v1/domains/{domain}/records/{type}/{name}', pathParams: compact('domain', 'type', 'name'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('DELETE', '/v1/domains/{domain}/records/{type}/{name}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function recordReplaceType(string $domain, string $type, array $records, ?string $xShopperId = null): mixed
+    public function recordReplaceType(DomainTypeBodyRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v1/domains/{domain}/records/{type}', pathParams: compact('domain', 'type'), headers: ['X-Shopper-Id' => $xShopperId], body: $records);
+        return $this->execute('PUT', '/v1/domains/{domain}/records/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function renew(string $domain, ?string $xShopperId = null, ?array $body = null): mixed
+    public function renew(DomainRenewRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/{domain}/renew', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $body);
+        return $this->execute('POST', '/v1/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function transferIn(string $domain, array $body, ?string $xShopperId = null): mixed
+    public function transferIn(DomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/{domain}/transfer', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId], body: $body);
+        return $this->execute('POST', '/v1/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function verifyEmail(string $domain, ?string $xShopperId = null): mixed
+    public function verifyEmail(DomainPathRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v1/domains/{domain}/verifyRegistrantEmail', pathParams: compact('domain'), headers: ['X-Shopper-Id' => $xShopperId]);
+        return $this->execute('POST', '/v1/domains/{domain}/verifyRegistrantEmail', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_domain(string $customerId, string $domain, ?string $xRequestId = null, ?array $includes = null): mixed
+    public function getCustomerDomain(CustomerDomainIncludesRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}', pathParams: compact('customerId', 'domain'), queryParams: compact('includes'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function delete__v2_customers_customerId_domains_domain_changeOfRegistrant(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function cancelCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_domain_changeOfRegistrant(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function getCustomerDomainChangeOfRegistrant(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/changeOfRegistrant', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function patch__v2_customers_customerId_domains_domain_dnssecRecords(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function addCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function delete__v2_customers_customerId_domains_domain_dnssecRecords(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function removeCustomerDomainDnssecRecords(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/dnssecRecords', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function put__v2_customers_customerId_domains_domain_nameServers(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function replaceCustomerDomainNameServers(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v2/customers/{customerId}/domains/{domain}/nameServers', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('PUT', '/v2/customers/{customerId}/domains/{domain}/nameServers', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function get__v2_customers_customerId_domains_domain_privacy_forwarding(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function getCustomerDomainPrivacyForwarding(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function patch__v2_customers_customerId_domains_domain_privacy_forwarding(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function updateCustomerDomainPrivacyForwarding(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/privacy/forwarding', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_redeem(string $customerId, string $domain, ?string $xRequestId = null, ?array $body = null): mixed
+    public function redeemCustomerDomain(CustomerDomainOptionalBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/redeem', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/redeem', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_renew(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function renewCustomerDomain(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/renew', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/renew', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_transfer(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function transferCustomerDomain(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function get__v2_customers_customerId_domains_domain_transfer(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function getCustomerDomainTransferStatus(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/transfer', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_domain_transfer_validate(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function validateCustomerDomainTransfer(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transfer/validate', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transfer/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferInAccept(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function acceptCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferInAccept', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferInCancel(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function cancelCustomerDomainTransferIn(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferInCancel', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInCancel', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferInRestart(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function restartCustomerDomainTransferIn(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRestart', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRestart', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferInRetry(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function retryCustomerDomainTransferIn(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRetry', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferInRetry', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferOut(string $customerId, string $domain, string $registrar, ?string $xRequestId = null): mixed
+    public function initiateCustomerDomainTransferOut(CustomerDomainRegistrarRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferOut', pathParams: compact('customerId', 'domain'), queryParams: compact('registrar'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOut', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferOutAccept(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function acceptCustomerDomainTransferOut(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutAccept', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutAccept', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_domain_transferOutReject(string $customerId, string $domain, ?string $xRequestId = null, ?string $reason = null): mixed
+    public function rejectCustomerDomainTransferOut(CustomerDomainReasonRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutReject', pathParams: compact('customerId', 'domain'), queryParams: compact('reason'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/transferOutReject', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function domainsForwardsDelete(string $customerId, string $fqdn): mixed
+    public function deleteDomainForwarding(DomainForwardingRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: compact('customerId', 'fqdn'));
+        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams());
     }
 
-    public function domainsForwardsGet(string $customerId, string $fqdn, ?bool $includeSubs = null): mixed
+    public function getDomainForwarding(DomainForwardingRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: compact('customerId', 'fqdn'), queryParams: compact('includeSubs'));
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams());
     }
 
-    public function domainsForwardsPut(string $customerId, string $fqdn, array $body): mixed
+    public function updateDomainForwarding(DomainForwardingRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: compact('customerId', 'fqdn'), body: $body);
+        return $this->execute('PUT', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body);
     }
 
-    public function domainsForwardsPost(string $customerId, string $fqdn, array $body): mixed
+    public function createDomainForwarding(DomainForwardingRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: compact('customerId', 'fqdn'), body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/forwards/{fqdn}', pathParams: $request->toPathParams(), body: $request->body);
     }
 
-    public function get__v2_customers_customerId_domains_domain_actions(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function listCustomerDomainActions(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}/actions', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function delete__v2_customers_customerId_domains_domain_actions_type(string $customerId, string $domain, string $type, ?string $xRequestId = null): mixed
+    public function cancelCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainsResponse
     {
-        return $this->call('DELETE', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: compact('customerId', 'domain', 'type'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('DELETE', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_domain_actions_type(string $customerId, string $domain, string $type, ?string $xRequestId = null): mixed
+    public function getCustomerDomainAction(CustomerDomainActionTypeRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: compact('customerId', 'domain', 'type'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/{domain}/actions/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_notifications(string $customerId, ?string $xRequestId = null): mixed
+    public function getCustomerDomainNotifications(CustomerIdRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/notifications', pathParams: compact('customerId'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_notifications_optIn(string $customerId, ?string $xRequestId = null): mixed
+    public function getCustomerDomainNotificationOptIns(CustomerIdRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: compact('customerId'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function put__v2_customers_customerId_domains_notifications_optIn(string $customerId, array $types, ?string $xRequestId = null): mixed
+    public function updateCustomerDomainNotificationOptIns(CustomerNotificationOptInUpdateRequest $request): DomainsResponse
     {
-        return $this->call('PUT', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: compact('customerId'), queryParams: compact('types'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('PUT', '/v2/customers/{customerId}/domains/notifications/optIn', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_customers_customerId_domains_notifications_schemas_type(string $customerId, string $type, ?string $xRequestId = null): mixed
+    public function getCustomerDomainNotificationSchema(CustomerNotificationSchemaRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/notifications/schemas/{type}', pathParams: compact('customerId', 'type'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/notifications/schemas/{type}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_notifications_notificationId_acknowledge(string $customerId, string $notificationId, ?string $xRequestId = null): mixed
+    public function acknowledgeCustomerDomainNotification(CustomerNotificationAckRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/notifications/{notificationId}/acknowledge', pathParams: compact('customerId', 'notificationId'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/notifications/{notificationId}/acknowledge', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_register(string $customerId, array $body, ?string $xRequestId = null): mixed
+    public function registerCustomerDomain(CustomerRegisterRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/register', pathParams: compact('customerId'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/register', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function get__v2_customers_customerId_domains_register_schema_tld(string $customerId, string $tld, ?string $xRequestId = null): mixed
+    public function getCustomerDomainRegisterSchema(CustomerRegisterSchemaRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/customers/{customerId}/domains/register/schema/{tld}', pathParams: compact('customerId', 'tld'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/customers/{customerId}/domains/register/schema/{tld}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function post__v2_customers_customerId_domains_register_validate(string $customerId, array $body, ?string $xRequestId = null): mixed
+    public function validateCustomerDomainRegister(CustomerRegisterValidateRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/register/validate', pathParams: compact('customerId'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/register/validate', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function get__v2_domains_maintenances(?string $xRequestId = null, ?string $status = null, ?string $modifiedAtAfter = null, ?string $startsAtAfter = null, ?int $limit = null): mixed
+    public function listDomainMaintenances(DomainsMaintenanceListRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/domains/maintenances', queryParams: compact('status', 'modifiedAtAfter', 'startsAtAfter', 'limit'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/domains/maintenances', queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_domains_maintenances_maintenanceId(string $maintenanceId, ?string $xRequestId = null): mixed
+    public function getDomainMaintenance(DomainMaintenanceRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/domains/maintenances/{maintenanceId}', pathParams: compact('maintenanceId'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/domains/maintenances/{maintenanceId}', pathParams: $request->toPathParams(), headers: $request->toHeaders());
     }
 
-    public function get__v2_domains_usage_yyyymm(string $yyyymm, ?string $xRequestId = null, ?array $includes = null): mixed
+    public function getDomainUsage(DomainsUsageRequest $request): DomainsResponse
     {
-        return $this->call('GET', '/v2/domains/usage/{yyyymm}', pathParams: compact('yyyymm'), queryParams: compact('includes'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('GET', '/v2/domains/usage/{yyyymm}', pathParams: $request->toPathParams(), queryParams: $request->toQueryParams(), headers: $request->toHeaders());
     }
 
-    public function patch__v2_customers_customerId_domains_domain_contacts(string $customerId, string $domain, array $body, ?string $xRequestId = null): mixed
+    public function updateCustomerDomainContacts(CustomerDomainBodyRequest $request): DomainsResponse
     {
-        return $this->call('PATCH', '/v2/customers/{customerId}/domains/{domain}/contacts', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId], body: $body);
+        return $this->execute('PATCH', '/v2/customers/{customerId}/domains/{domain}/contacts', pathParams: $request->toPathParams(), headers: $request->toHeaders(), body: $request->body);
     }
 
-    public function post__v2_customers_customerId_domains_domain_regenerateAuthCode(string $customerId, string $domain, ?string $xRequestId = null): mixed
+    public function regenerateCustomerDomainAuthCode(CustomerDomainRequest $request): DomainsResponse
     {
-        return $this->call('POST', '/v2/customers/{customerId}/domains/{domain}/regenerateAuthCode', pathParams: compact('customerId', 'domain'), headers: ['X-Request-Id' => $xRequestId]);
+        return $this->execute('POST', '/v2/customers/{customerId}/domains/{domain}/regenerateAuthCode', pathParams: $request->toPathParams(), headers: $request->toHeaders());
+    }
+
+    private function execute(
+        string $method,
+        string $path,
+        array $pathParams = [],
+        array $queryParams = [],
+        array $headers = [],
+        mixed $body = null
+    ): DomainsResponse {
+        try {
+            $response = $this->call($method, $path, $pathParams, $queryParams, $headers, $body);
+            return DomainsResponse::fromMixed($response);
+        } catch (ApiException $exception) {
+            throw $this->mapException($exception);
+        }
+    }
+
+    private function mapException(ApiException $exception): DomainsApiException
+    {
+        return match ($exception->getStatusCode()) {
+            400 => $this->rebuildException(DomainsBadRequestException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            401 => $this->rebuildException(DomainsUnauthorizedException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            403 => $this->rebuildException(DomainsForbiddenException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            404 => $this->rebuildException(DomainsNotFoundException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            409 => $this->rebuildException(DomainsConflictException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            422 => $this->rebuildException(DomainsUnprocessableEntityException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+            429 => $this->rebuildException(DomainsRateLimitException::class, $exception, ErrorLimitResponse::fromArray($this->decodeErrorBody($exception))),
+            default => $this->rebuildException(DomainsServerException::class, $exception, ErrorResponse::fromArray($this->decodeErrorBody($exception))),
+        };
+    }
+
+    private function decodeErrorBody(ApiException $exception): array
+    {
+        $body = $exception->getResponseBody();
+        if ($body === '') {
+            return [];
+        }
+
+        try {
+            $decoded = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            return is_array($decoded) ? $decoded : [];
+        } catch (\JsonException) {
+            return [];
+        }
+    }
+
+    /**
+     * @param class-string<DomainsApiException> $class
+     */
+    private function rebuildException(string $class, ApiException $exception, object $errorResponse): DomainsApiException
+    {
+        return new $class(
+            message: $exception->getMessage(),
+            statusCode: $exception->getStatusCode(),
+            responseBody: $exception->getResponseBody(),
+            headers: $exception->getHeaders(),
+            requestMethod: $exception->getRequestMethod(),
+            requestUrl: $exception->getRequestUrl(),
+            errorResponse: $errorResponse
+        );
     }
 }
