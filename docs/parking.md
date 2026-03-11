@@ -1,75 +1,42 @@
 # Parking Service
 
-This document covers the Parking service in the GoDaddy PHP SDK. It wraps the **GoDaddy API** endpoints from the provided Swagger file.
+This document covers the Parking service in the GoDaddy PHP SDK.
 
-Client accessor: ``$client->parking()``
+Client accessor: `$client->parking()`
 
-## getMetrics
+All methods now use typed request DTOs and typed response DTOs.
 
-Returns a list of parking metrics for the specified customer, using specified filters
+## Methods
 
-- HTTP method: ``GET``
-- Path: ``/v1/customers/{customerId}/parking/metrics``
-- Swagger operationId: ``getMetrics``
+- `getMetrics(GetParkingMetricsRequest $request): MetricListResponse`
+- `getMetricsByDomain(GetParkingMetricsByDomainRequest $request): MetricByDomainListResponse`
 
-### Input
+## Example
 
 ```php
-$response = $client->parking()->getMetrics(
-    customerId: 'sample',
-    periodStartPtz: 'sample',
-    periodEndPtz: 'sample',
-    limit: 1,
-    offset: 1,
-    xRequestId: 'header-value',
-);
-```
+use CommunitySDKs\GoDaddy\Dto\Parking\Request\GetParkingMetricsRequest;
 
-### Output
+$response = $client->parking()->getMetrics(new GetParkingMetricsRequest(
+    customerId: 'MY',
+    periodStartPtz: '2026-03-01',
+    periodEndPtz: '2026-03-10',
+    limit: 20,
+));
 
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/customers/{customerId}/parking/metrics",
-  "summary": "Returns a list of parking metrics for the specified customer, using specified filters",
-  "data": {}
+foreach ($response->metrics as $metric) {
+    echo $metric->periodPtz . ': ' . $metric->visitCount . PHP_EOL;
 }
 ```
 
-## getMetricsByDomain
+## Exceptions
 
-Returns a list of domain metrics for the specified customer and portfolio, using specified filters
+Parking endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Parking\*`:
 
-- HTTP method: ``GET``
-- Path: ``/v1/customers/{customerId}/parking/metricsByDomain``
-- Swagger operationId: ``getMetricsByDomain``
+- `ParkingBadRequestException`
+- `ParkingUnauthorizedException`
+- `ParkingForbiddenException`
+- `ParkingUnprocessableEntityException`
+- `ParkingRateLimitException`
+- `ParkingServerException`
 
-### Input
-
-```php
-$response = $client->parking()->getMetricsByDomain(
-    customerId: 'sample',
-    startDate: 'sample',
-    endDate: 'sample',
-    domains: ['sample'],
-    domainLike: 'sample',
-    portfolioId: 'sample',
-    limit: 1,
-    offset: 1,
-    xRequestId: 'header-value',
-);
-```
-
-### Output
-
-```json
-{
-  "ok": true,
-  "method": "GET",
-  "path": "/v1/customers/{customerId}/parking/metricsByDomain",
-  "summary": "Returns a list of domain metrics for the specified customer and portfolio, using specified filters",
-  "data": {}
-}
-```
-
+Each exception extends `ParkingApiException` and exposes `getErrorResponse()`.
