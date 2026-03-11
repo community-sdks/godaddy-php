@@ -1,35 +1,47 @@
 # Auctions Service
 
-This document covers the Auctions service in the GoDaddy PHP SDK. It wraps the **Auctions API** endpoints from the provided Swagger file.
+This document covers the Auctions service in the GoDaddy PHP SDK.
 
-Client accessor: ``$client->auctions()``
+Client accessor: `$client->auctions()`
 
-## placeBids
+All methods now use typed request DTOs and typed response DTOs.
 
-Places multiple bids with a single request.
+## Methods
 
-- HTTP method: ``POST``
-- Path: ``/v1/customers/{customerId}/aftermarket/listings/bids``
-- Swagger operationId: ``placeBids``
+- `placeBids(PlaceBidsRequest $request): PlaceBidsResponse`
 
-### Input
+## Example
 
 ```php
-$response = $client->auctions()->placeBids(
-    customerId: 'sample',
-    requestBody: ['sample'],
-);
-```
+use CommunitySDKs\GoDaddy\Dto\Auctions\Request\BidCreateRequest;
+use CommunitySDKs\GoDaddy\Dto\Auctions\Request\PlaceBidsRequest;
 
-### Output
+$response = $client->auctions()->placeBids(new PlaceBidsRequest(
+  customerId: '295e3bc3-b3b9-4d95-aae5-ede41a994d13',
+  requestBody: [
+    new BidCreateRequest(
+      bidAmountUsd: 100000000,
+      tosAccepted: true,
+      listingId: 200000
+    )
+  ]
+));
 
-```json
-{
-  "ok": true,
-  "method": "POST",
-  "path": "/v1/customers/{customerId}/aftermarket/listings/bids",
-  "summary": "Places multiple bids with a single request.",
-  "data": {}
+foreach ($response->bids as $bid) {
+  echo $bid->status . PHP_EOL;
 }
 ```
+
+## Exceptions
+
+Auctions endpoints now throw dedicated exceptions in `CommunitySDKs\GoDaddy\Exception\Auctions\*`:
+
+- `AuctionsBadRequestException`
+- `AuctionsUnauthorizedException`
+- `AuctionsForbiddenException`
+- `AuctionsUnprocessableEntityException`
+- `AuctionsRateLimitException`
+- `AuctionsServerException`
+
+Each exception extends `AuctionsApiException` and exposes `getErrorResponse()`.
 
